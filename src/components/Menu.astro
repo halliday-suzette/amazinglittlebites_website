@@ -1,4 +1,15 @@
 ---
+import { getDictionary, type Lang } from "../i18n/translations";
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = "en" } = Astro.props;
+const t = getDictionary(lang);
+
+const BARTENDING_ITEM = "Mobile Bartending / Mobile Coffee Cart";
+
 const snackCarts = [
   "Mini-Pancakes Bar",
   "La Maruchan Bar",
@@ -7,7 +18,7 @@ const snackCarts = [
   "Ice Cream Sandwich Bar",
   "Chunky Brownie Sundae",
   "Charcuterie (Cheese) Board Bar",
-  "Mobile Bartending / Mobile Coffee Cart",
+  BARTENDING_ITEM,
   "Mini Churros Bar",
   "Little Taco Bar / Bacon Hot Dog Bar",
 ];
@@ -24,13 +35,13 @@ const hydrationBar = [
 
 <section id="menu" class="px-4 py-14 sm:px-6">
   <div class="mx-auto max-w-6xl">
-    <h2 class="text-center font-display text-2xl font-bold text-rose sm:text-3xl">Our Menu</h2>
+    <h2 class="text-center font-display text-2xl font-bold text-rose sm:text-3xl">{t.menu.heading}</h2>
 
     <div class="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
       <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-blush/50 sm:p-8">
         <div class="flex items-center gap-3">
           <span class="text-3xl" aria-hidden="true">🍰</span>
-          <h3 class="font-display text-xl font-semibold text-rose">Snack Carts</h3>
+          <h3 class="font-display text-xl font-semibold text-rose">{t.menu.snackCartsTitle}</h3>
         </div>
         <div class="mt-2 h-1 w-12 rounded-full bg-rose"></div>
 
@@ -40,11 +51,11 @@ const hydrationBar = [
               <span class="mt-1 text-rose" aria-hidden="true">•</span>
               <span>
                 {item}
-                {item === "Mobile Bartending / Mobile Coffee Cart" && (
+                {item === BARTENDING_ITEM && (
                   <>
                     {" "}
                     <a href="#services" class="text-xs text-rose underline underline-offset-2 hover:text-rose-dark">
-                      see La Familia Bartending →
+                      {t.menu.bartendingCrossRef}
                     </a>
                   </>
                 )}
@@ -57,7 +68,7 @@ const hydrationBar = [
       <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-blush/50 sm:p-8">
         <div class="flex items-center gap-3">
           <span class="text-3xl" aria-hidden="true">🥤</span>
-          <h3 class="font-display text-xl font-semibold text-rose">Hydration Bar</h3>
+          <h3 class="font-display text-xl font-semibold text-rose">{t.menu.hydrationBarTitle}</h3>
         </div>
         <div class="mt-2 h-1 w-12 rounded-full bg-rose"></div>
 
@@ -73,7 +84,7 @@ const hydrationBar = [
     </div>
 
     <p class="mx-auto mt-8 max-w-2xl text-center font-body text-sm text-maroon/70 sm:text-base">
-      Menu items are customizable — mix and match for your event!
+      {t.menu.note}
     </p>
   </div>
 </section>

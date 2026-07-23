@@ -1,19 +1,28 @@
 ---
+import { getDictionary, type Lang } from "../i18n/translations";
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = "en" } = Astro.props;
+const t = getDictionary(lang);
+
 const otherAreas = ["San Bernardino", "Riverside"];
 ---
 
 <section id="service-area" class="px-4 py-14 sm:px-6">
   <div class="mx-auto max-w-3xl text-center">
-    <h2 class="font-display text-2xl font-bold text-rose sm:text-3xl">Where We Serve</h2>
+    <h2 class="font-display text-2xl font-bold text-rose sm:text-3xl">{t.serviceArea.heading}</h2>
 
     <div class="mt-8 inline-flex flex-col items-center gap-2">
       <span class="rounded-full bg-maroon px-6 py-2 font-display text-lg font-semibold text-cream">
-        📍 Orange County, CA
+        📍 {t.serviceArea.primary}
       </span>
-      <span class="font-body text-sm text-maroon/70">Primary service area</span>
+      <span class="font-body text-sm text-maroon/70">{t.serviceArea.primaryNote}</span>
     </div>
 
-    <p class="mt-8 font-body text-sm font-medium uppercase tracking-wide text-maroon/60">Also serving</p>
+    <p class="mt-8 font-body text-sm font-medium uppercase tracking-wide text-maroon/60">{t.serviceArea.alsoServing}</p>
     <div class="mt-3 flex flex-wrap justify-center gap-3">
       {otherAreas.map((area) => (
         <span class="rounded-full border-2 border-rose px-5 py-2 font-body text-sm font-semibold text-rose">
@@ -21,7 +30,7 @@ const otherAreas = ["San Bernardino", "Riverside"];
         </span>
       ))}
       <span class="rounded-full border-2 border-rose px-5 py-2 font-body text-sm font-semibold text-rose">
-        Surrounding communities
+        {t.serviceArea.surrounding}
       </span>
     </div>
   </div>

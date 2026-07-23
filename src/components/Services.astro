@@ -1,23 +1,22 @@
 ---
+import { getDictionary, type Lang } from "../i18n/translations";
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = "en" } = Astro.props;
+const t = getDictionary(lang);
+
 const services = [
-  {
-    icon: "🎉",
-    title: "Event Catering",
-    description:
-      "Quinceañeras, sweet 16s, weddings, birthday parties, and every celebration in between — we tailor our cart to fit your event.",
-  },
-  {
-    icon: "🍰",
-    title: "Dessert & Snack Cart",
-    description:
-      "A fully customizable menu of sweet and savory bites, styled and served fresh from our signature cart at your venue.",
-  },
+  { icon: "🎉", title: t.services.eventCatering.title, description: t.services.eventCatering.description },
+  { icon: "🍰", title: t.services.dessertCart.title, description: t.services.dessertCart.description },
 ];
 ---
 
 <section id="services" class="bg-blush/20 px-4 py-14 sm:px-6">
   <div class="mx-auto max-w-6xl">
-    <h2 class="text-center font-display text-2xl font-bold text-rose sm:text-3xl">Our Services</h2>
+    <h2 class="text-center font-display text-2xl font-bold text-rose sm:text-3xl">{t.services.heading}</h2>
 
     <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {services.map((service) => (
@@ -30,13 +29,12 @@ const services = [
 
       <div class="relative rounded-2xl border-2 border-dashed border-maroon/40 bg-maroon p-6 text-cream shadow-md sm:col-span-2 lg:col-span-1">
         <span class="absolute -top-3 right-4 rounded-full bg-blush px-3 py-1 font-body text-xs font-bold uppercase tracking-wide text-maroon">
-          Featured Partner
+          {t.services.bartending.badge}
         </span>
         <div class="text-4xl">🍹</div>
-        <h3 class="mt-3 font-display text-xl font-semibold text-blush">La Familia Bartending Services</h3>
+        <h3 class="mt-3 font-display text-xl font-semibold text-blush">{t.services.bartending.title}</h3>
         <p class="mt-2 font-body text-sm text-cream/90">
-          Pair your dessert cart with our trusted bartending partner for a complete celebration
-          experience. Ask us about bundling La Familia Bartending Services with your quote.
+          {t.services.bartending.description}
         </p>
       </div>
     </div>

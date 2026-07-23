@@ -1,5 +1,12 @@
 ---
-const eventTypes = ["Quinceañera", "Sweet 16", "Wedding", "Birthday", "Other"];
+import { getDictionary, type Lang } from "../i18n/translations";
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = "en" } = Astro.props;
+const t = getDictionary(lang);
 
 const PHONES = [
   { name: "J.C.", display: "714-783-6605", href: "tel:+17147836605" },
@@ -9,12 +16,12 @@ const PHONES = [
 
 <section id="quote" class="bg-blush/20 px-4 py-14 sm:px-6">
   <div class="mx-auto max-w-2xl">
-    <h2 class="text-center font-display text-2xl font-bold text-rose sm:text-3xl">Get a Free Quote</h2>
+    <h2 class="text-center font-display text-2xl font-bold text-rose sm:text-3xl">{t.quoteForm.heading}</h2>
     <p class="mt-3 text-center font-body text-sm text-maroon/70 sm:text-base">
-      Tell us about your event and we'll get back to you with a custom quote.
+      {t.quoteForm.subheading}
     </p>
     <p class="mt-2 text-center font-body text-sm text-maroon/70 sm:text-base">
-      Prefer to call?{" "}
+      {t.quoteForm.preferToCall}{" "}
       {PHONES.map((phone, i) => (
         <>
           <a href={phone.href} class="text-rose underline hover:text-rose-dark">
@@ -29,6 +36,7 @@ const PHONES = [
       id="quote-form"
       action="https://formspree.io/f/mykrnkjz"
       method="POST"
+      data-messages={JSON.stringify(t.quoteForm.messages)}
       class="mt-8 space-y-5 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-blush/50 sm:p-8"
       novalidate
     >
@@ -38,7 +46,7 @@ const PHONES = [
 
       <div class="grid gap-5 sm:grid-cols-2">
         <div>
-          <label for="name" class="block font-body text-sm font-medium text-maroon">Name *</label>
+          <label for="name" class="block font-body text-sm font-medium text-maroon">{t.quoteForm.fields.name} *</label>
           <input
             type="text"
             id="name"
@@ -50,7 +58,7 @@ const PHONES = [
         </div>
 
         <div>
-          <label for="phone" class="block font-body text-sm font-medium text-maroon">Phone *</label>
+          <label for="phone" class="block font-body text-sm font-medium text-maroon">{t.quoteForm.fields.phone} *</label>
           <input
             type="tel"
             id="phone"
@@ -63,7 +71,7 @@ const PHONES = [
         </div>
 
         <div>
-          <label for="email" class="block font-body text-sm font-medium text-maroon">Email *</label>
+          <label for="email" class="block font-body text-sm font-medium text-maroon">{t.quoteForm.fields.email} *</label>
           <input
             type="email"
             id="email"
@@ -75,7 +83,7 @@ const PHONES = [
         </div>
 
         <div>
-          <label for="event-date" class="block font-body text-sm font-medium text-maroon">Event Date *</label>
+          <label for="event-date" class="block font-body text-sm font-medium text-maroon">{t.quoteForm.fields.eventDate} *</label>
           <input
             type="date"
             id="event-date"
@@ -87,21 +95,21 @@ const PHONES = [
         </div>
 
         <div>
-          <label for="event-type" class="block font-body text-sm font-medium text-maroon">Event Type *</label>
+          <label for="event-type" class="block font-body text-sm font-medium text-maroon">{t.quoteForm.fields.eventType} *</label>
           <select
             id="event-type"
             name="event_type"
             required
             class="mt-1 w-full rounded-lg border border-blush bg-cream px-3 py-2 font-body text-maroon focus:border-rose focus:outline-none focus:ring-1 focus:ring-rose"
           >
-            <option value="" disabled selected>Select an event type</option>
-            {eventTypes.map((type) => <option value={type}>{type}</option>)}
+            <option value="" disabled selected>{t.quoteForm.fields.selectEventType}</option>
+            {t.quoteForm.eventTypes.map((type) => <option value={type.value}>{type.label}</option>)}
           </select>
           <p class="field-error mt-1 hidden font-body text-xs text-red-600"></p>
         </div>
 
         <div>
-          <label for="guest-count" class="block font-body text-sm font-medium text-maroon">Estimated Guest Count *</label>
+          <label for="guest-count" class="block font-body text-sm font-medium text-maroon">{t.quoteForm.fields.guestCount} *</label>
           <input
             type="number"
             id="guest-count"
@@ -115,7 +123,7 @@ const PHONES = [
       </div>
 
       <div>
-        <label for="message" class="block font-body text-sm font-medium text-maroon">Describe Your Event</label>
+        <label for="message" class="block font-body text-sm font-medium text-maroon">{t.quoteForm.fields.message}</label>
         <textarea
           id="message"
           name="message"
@@ -129,7 +137,7 @@ const PHONES = [
         id="submit-btn"
         class="w-full rounded-full bg-rose px-8 py-3 font-display text-base font-semibold text-white shadow-md transition hover:bg-rose-dark disabled:cursor-not-allowed disabled:opacity-60"
       >
-        Submit Quote Request
+        {t.quoteForm.submit}
       </button>
 
       <p id="form-status" class="hidden text-center font-body text-sm" role="status" aria-live="polite"></p>
@@ -141,6 +149,18 @@ const PHONES = [
   const form = document.getElementById("quote-form") as HTMLFormElement | null;
   const submitBtn = document.getElementById("submit-btn") as HTMLButtonElement | null;
   const statusEl = document.getElementById("form-status");
+
+  interface FormMessages {
+    required: string;
+    invalidEmail: string;
+    invalidPhone: string;
+    fixErrors: string;
+    sending: string;
+    success: string;
+    error: string;
+  }
+
+  const messages: FormMessages = JSON.parse(form?.dataset.messages ?? "{}");
 
   const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const PHONE_REGEX = /^[\d\s()+.-]{7,}$/;
@@ -182,20 +202,20 @@ const PHONES = [
     const requiredFields = form.querySelectorAll<HTMLInputElement | HTMLSelectElement>("[required]");
     requiredFields.forEach((field) => {
       if (!field.value.trim()) {
-        showFieldError(field, "This field is required.");
+        showFieldError(field, messages.required);
         isValid = false;
       }
     });
 
     const emailField = form.querySelector<HTMLInputElement>("#email");
     if (emailField?.value && !EMAIL_REGEX.test(emailField.value)) {
-      showFieldError(emailField, "Please enter a valid email address.");
+      showFieldError(emailField, messages.invalidEmail);
       isValid = false;
     }
 
     const phoneField = form.querySelector<HTMLInputElement>("#phone");
     if (phoneField?.value && !PHONE_REGEX.test(phoneField.value)) {
-      showFieldError(phoneField, "Please enter a valid phone number.");
+      showFieldError(phoneField, messages.invalidPhone);
       isValid = false;
     }
 
@@ -209,13 +229,13 @@ const PHONES = [
     statusEl?.classList.add("hidden");
 
     if (!validate()) {
-      setStatus("Please fix the errors above and try again.", true);
+      setStatus(messages.fixErrors, true);
       return;
     }
 
     submitBtn.disabled = true;
     const originalText = submitBtn.textContent;
-    submitBtn.textContent = "Sending...";
+    submitBtn.textContent = messages.sending;
 
     try {
       const response = await fetch(form.action, {
@@ -225,13 +245,13 @@ const PHONES = [
       });
 
       if (response.ok) {
-        setStatus("Thanks! We'll be in touch soon.", false);
+        setStatus(messages.success, false);
         form.reset();
       } else {
-        setStatus("Something went wrong. Please try again or call us directly.", true);
+        setStatus(messages.error, true);
       }
     } catch {
-      setStatus("Something went wrong. Please try again or call us directly.", true);
+      setStatus(messages.error, true);
     } finally {
       submitBtn.disabled = false;
       submitBtn.textContent = originalText;

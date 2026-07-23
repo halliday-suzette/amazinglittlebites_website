@@ -82,6 +82,40 @@ domain serves from the root, not a `/amazinglittlebites_website/` subpath) — t
 `favicon.png` href in `src/layouts/Layout.astro` back to a plain `"/favicon.png"` if you remove
 `BASE_URL` usage. Re-run `npm run build` locally afterward to confirm no broken asset paths.
 
+## English / Spanish (bilingual site)
+
+The site is available in English (`/`) and Mexican Spanish (`/es/`) as two separate, real pages —
+not a client-side text swap — so each language is independently indexable by search engines and
+shareable as its own link. A slim "EN | ES" bar above the main nav lets visitors switch; it always
+links to the equivalent page in the other language.
+
+How it's wired up:
+
+- **`src/i18n/translations.ts`** — a single dictionary file with an `en` and an `es` object
+  covering every piece of UI copy (nav labels, headings, button text, form labels/validation
+  messages, footer text, etc.). `getDictionary(lang)` returns the right one.
+- **Every component** (`Nav`, `Hero`, `About`, `Services`, `Menu`, `HowItWorks`, `ServiceArea`,
+  `QuoteForm`, `Footer`, `Layout`) accepts a `lang?: "en" | "es"` prop and pulls its text from that
+  dictionary instead of hardcoding strings — the markup/styling is identical between languages,
+  only the copy changes.
+- **`src/pages/index.astro`** renders everything with `lang="en"`; **`src/pages/es/index.astro`**
+  renders the exact same components with `lang="es"`.
+- Menu item names (e.g. "Agua de Horchata", "Esquite Bar") are intentionally **not** translated in
+  either language — they're the business's actual product names, kept authentic on both pages.
+- The Formspree quote-request `event_type` field submits a canonical English value (e.g.
+  `"Wedding"`) regardless of which language the visitor used, so J.C./Nichole always see
+  consistent values in their inbox — only the on-page label is translated (e.g. "Boda").
+- `Layout.astro` adds `hreflang`/canonical tags and `og:locale` (`es_MX`, not `es_ES` — Mexican
+  Spanish, not Spain Spanish) so search engines and shared links treat the two pages correctly.
+
+**To add or edit copy:** update the matching key in both the `en` and `es` objects in
+`src/i18n/translations.ts` — components will pick up the change automatically on rebuild.
+
+**To add a third language:** add a new locale object to `translations.ts` (matching the same
+shape as `en`/`es`), extend the `Lang` type, add a new `src/pages/<code>/index.astro` mirroring
+`src/pages/es/index.astro` with `lang="<code>"`, and add a third segment to the toggle bar in
+`Nav.astro`.
+
 ## Updating social links
 
 The footer (`src/components/Footer.astro`) has placeholder Instagram and Facebook icon links
@@ -93,10 +127,13 @@ The footer (`src/components/Footer.astro`) has placeholder Instagram and Faceboo
 src/
   assets/            Logo and other imported/optimized images
   components/        One component per page section (Nav, Hero, About, Services, Menu,
-                      HowItWorks, ServiceArea, QuoteForm, Footer)
-  layouts/Layout.astro  Shared HTML shell, fonts, global styles
-  pages/index.astro     Assembles all sections into the single page
+                      HowItWorks, ServiceArea, QuoteForm, Footer) — each takes a lang prop
+  i18n/translations.ts  English + Spanish copy dictionary (see "English / Spanish" above)
+  layouts/Layout.astro  Shared HTML shell, fonts, global styles, hreflang tags
+  pages/index.astro     English page — assembles all sections with lang="en"
+  pages/es/index.astro  Spanish page — same sections with lang="es"
   styles/global.css     Tailwind import + brand color/font theme tokens
 public/
-  favicon.png         Browser tab icon
+  favicon.jpg         Browser tab icon
+  og-image.jpg         Social/link-preview share image
 ```

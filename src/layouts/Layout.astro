@@ -1,42 +1,53 @@
 ---
 import "../styles/global.css";
+import { getDictionary, type Lang } from "../i18n/translations";
 
 interface Props {
+  lang?: Lang;
   title?: string;
   description?: string;
 }
 
-const {
-  title = "Amazing Little Bites | Dessert & Snack Cart Catering",
-  description = "We know your sweet spot. Mobile dessert and snack cart catering for quinceañeras, sweet 16s, weddings, and birthdays across Orange County, San Bernardino, and Riverside.",
-} = Astro.props;
+const { lang = "en", title, description } = Astro.props;
+const t = getDictionary(lang);
 
-const pageUrl = new URL(import.meta.env.BASE_URL, Astro.site);
+const resolvedTitle = title ?? t.meta.title;
+const resolvedDescription = description ?? t.meta.description;
+
+const enUrl = new URL(import.meta.env.BASE_URL, Astro.site);
+const esUrl = new URL(`${import.meta.env.BASE_URL}es/`, Astro.site);
+const pageUrl = lang === "es" ? esUrl : enUrl;
 const ogImageUrl = new URL(`${import.meta.env.BASE_URL}og-image.jpg`, Astro.site);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/jpeg" href={`${import.meta.env.BASE_URL}favicon.jpg`} />
-    <title>{title}</title>
-    <meta name="description" content={description} />
+    <title>{resolvedTitle}</title>
+    <meta name="description" content={resolvedDescription} />
     <meta name="theme-color" content="#d98ea3" />
+
+    <link rel="canonical" href={pageUrl} />
+    <link rel="alternate" hreflang="en" href={enUrl} />
+    <link rel="alternate" hreflang="es" href={esUrl} />
+    <link rel="alternate" hreflang="x-default" href={enUrl} />
 
     <meta property="og:type" content="website" />
     <meta property="og:url" content={pageUrl} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta property="og:locale" content={lang === "es" ? "es_MX" : "en_US"} />
+    <meta property="og:title" content={resolvedTitle} />
+    <meta property="og:description" content={resolvedDescription} />
     <meta property="og:image" content={ogImageUrl} />
     <meta property="og:image:width" content="1179" />
     <meta property="og:image:height" content="822" />
     <meta property="og:image:alt" content="Amazing Little Bites logo — a pink dessert cart with an umbrella" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
+    <meta name="twitter:title" content={resolvedTitle} />
+    <meta name="twitter:description" content={resolvedDescription} />
     <meta name="twitter:image" content={ogImageUrl} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />

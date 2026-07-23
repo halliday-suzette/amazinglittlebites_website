@@ -9,18 +9,20 @@ import HowItWorks from "../components/HowItWorks.astro";
 import ServiceArea from "../components/ServiceArea.astro";
 import QuoteForm from "../components/QuoteForm.astro";
 import Footer from "../components/Footer.astro";
+
+const lang = "en";
 ---
 
-<Layout>
-  <Nav />
+<Layout lang={lang}>
+  <Nav lang={lang} />
   <main>
-    <Hero />
-    <About />
-    <Services />
-    <Menu />
-    <HowItWorks />
-    <ServiceArea />
-    <QuoteForm />
+    <Hero lang={lang} />
+    <About lang={lang} />
+    <Services lang={lang} />
+    <Menu lang={lang} />
+    <HowItWorks lang={lang} />
+    <ServiceArea lang={lang} />
+    <QuoteForm lang={lang} />
   </main>
-  <Footer />
+  <Footer lang={lang} />
 </Layout>
