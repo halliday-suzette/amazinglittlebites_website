@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+@theme {
+  --color-blush: #e8b4c0;
+  --color-rose: #d98ea3;
+  --color-rose-dark: #c26f87;
+  --color-maroon: #5c2a3a;
+  --color-cream: #fdf8f4;
+
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body: "Inter", ui-sans-serif, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Offsets anchor targets so the sticky nav doesn't cover section headings */
+section[id] {
+  scroll-margin-top: 5rem;
+}

@@ -1,0 +1,119 @@
+---
+import { Image } from "astro:assets";
+import logo from "../assets/logo.jpg";
+
+const PHONES = [
+  { name: "J.C.", display: "714-783-6605", href: "tel:+17147836605" },
+  { name: "Nichole", display: "714-783-6615", href: "tel:+17147836615" },
+];
+
+const navLinks = [
+  { href: "#home", label: "Home" },
+  { href: "#services", label: "Services" },
+  { href: "#menu", label: "Menu" },
+  { href: "#service-area", label: "Service Area" },
+  { href: "#quote", label: "Get a Quote" },
+  { href: "#contact", label: "Contact" },
+];
+---
+
+<header class="sticky top-0 z-50 border-b border-blush/60 bg-cream/95 backdrop-blur">
+  <nav class="mx-auto flex max-w-6xl items-center justify-between px-4 py-2 sm:px-6" aria-label="Primary">
+    <a href="#home" class="flex items-center gap-2">
+      <Image src={logo} alt="Amazing Little Bites logo" width={48} height={48} class="h-12 w-12 object-contain" />
+      <span class="max-w-[8.5rem] truncate font-display text-lg font-semibold text-rose sm:max-w-none sm:text-xl">Amazing Little Bites</span>
+    </a>
+
+    <ul class="hidden items-center gap-6 md:flex">
+      {navLinks.map((link) => (
+        <li>
+          <a href={link.href} class="font-body text-sm font-medium text-maroon transition hover:text-rose">
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <div class="flex items-center gap-3">
+      <div class="hidden items-center gap-2 sm:flex">
+        {PHONES.map((phone) => (
+          <a
+            href={phone.href}
+            title={`Call ${phone.name} at ${phone.display}`}
+            class="inline-flex items-center rounded-full bg-rose px-4 py-2 font-body text-sm font-semibold text-white transition hover:bg-rose-dark"
+          >
+            📞 {phone.name}
+          </a>
+        ))}
+      </div>
+      <div class="flex items-center gap-2 sm:hidden">
+        {PHONES.map((phone) => (
+          <a
+            href={phone.href}
+            aria-label={`Call ${phone.name} at ${phone.display}`}
+            class="inline-flex items-center gap-1 rounded-full bg-rose px-3 py-2.5 font-body text-xs font-semibold text-white transition hover:bg-rose-dark"
+          >
+            📞 {phone.name.charAt(0)}
+          </a>
+        ))}
+      </div>
+
+      <button
+        id="nav-toggle"
+        type="button"
+        class="inline-flex items-center justify-center rounded-md p-2 text-maroon md:hidden"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label="Toggle navigation menu"
+      >
+        <svg id="icon-open" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+        <svg id="icon-close" xmlns="http://www.w3.org/2000/svg" class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <ul id="mobile-menu" class="hidden flex-col gap-1 border-t border-blush/60 bg-cream px-4 pb-4 pt-2 md:hidden">
+    {navLinks.map((link) => (
+      <li>
+        <a href={link.href} class="mobile-nav-link block rounded-md px-3 py-2 font-body text-base font-medium text-maroon hover:bg-blush/40">
+          {link.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</header>
+
+<script>
+  const toggle = document.getElementById("nav-toggle");
+  const menu = document.getElementById("mobile-menu");
+  const iconOpen = document.getElementById("icon-open");
+  const iconClose = document.getElementById("icon-close");
+
+  function closeMenu() {
+    menu?.classList.add("hidden");
+    iconOpen?.classList.remove("hidden");
+    iconClose?.classList.add("hidden");
+    toggle?.setAttribute("aria-expanded", "false");
+  }
+
+  function toggleMenu() {
+    const isOpen = !menu?.classList.contains("hidden");
+    if (isOpen) {
+      closeMenu();
+    } else {
+      menu?.classList.remove("hidden");
+      iconOpen?.classList.add("hidden");
+      iconClose?.classList.remove("hidden");
+      toggle?.setAttribute("aria-expanded", "true");
+    }
+  }
+
+  toggle?.addEventListener("click", toggleMenu);
+  document.querySelectorAll(".mobile-nav-link").forEach((link) => {
+    link.addEventListener("click", closeMenu);
+  });
+</script>

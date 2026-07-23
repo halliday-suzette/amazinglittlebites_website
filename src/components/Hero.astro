@@ -1,0 +1,49 @@
+---
+import { Image } from "astro:assets";
+import logo from "../assets/logo.jpg";
+
+const PHONES = [
+  { name: "J.C.", display: "714-783-6605", href: "tel:+17147836605" },
+  { name: "Nichole", display: "714-783-6615", href: "tel:+17147836615" },
+];
+---
+
+<section id="home" class="bg-gradient-to-b from-blush/40 via-cream to-cream px-4 py-14 sm:px-6 sm:py-20">
+  <div class="mx-auto flex max-w-5xl flex-col items-center gap-8 text-center">
+    <Image
+      src={logo}
+      alt="Amazing Little Bites logo — a pink dessert cart with an umbrella"
+      width={600}
+      class="w-64 max-w-full object-contain sm:w-96 md:w-[28rem]"
+      priority
+    />
+
+    <p class="font-display text-lg italic text-rose sm:text-xl">"We know your sweet spot"</p>
+
+    <h1 class="font-display text-3xl font-bold leading-tight text-maroon sm:text-4xl md:text-5xl">
+      Sweet Treats &amp; Fun Bites for Your Next Celebration
+    </h1>
+
+    <p class="max-w-2xl text-balance font-body text-base text-maroon/80 sm:text-lg">
+      From quinceañeras and sweet 16s to weddings and birthday parties, Amazing Little Bites
+      brings a fun, customizable dessert &amp; snack cart straight to your celebration.
+    </p>
+
+    <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
+      <a
+        href="#quote"
+        class="rounded-full bg-rose px-8 py-3 font-display text-base font-semibold text-white shadow-md transition hover:bg-rose-dark"
+      >
+        Get a Free Quote
+      </a>
+      {PHONES.map((phone) => (
+        <a
+          href={phone.href}
+          class="rounded-full border-2 border-rose px-8 py-3 font-display text-base font-semibold text-rose transition hover:bg-rose hover:text-white"
+        >
+          Call {phone.name}: {phone.display}
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

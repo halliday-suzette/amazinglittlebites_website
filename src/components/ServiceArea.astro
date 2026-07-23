@@ -1,0 +1,28 @@
+---
+const otherAreas = ["San Bernardino", "Riverside"];
+---
+
+<section id="service-area" class="px-4 py-14 sm:px-6">
+  <div class="mx-auto max-w-3xl text-center">
+    <h2 class="font-display text-2xl font-bold text-rose sm:text-3xl">Where We Serve</h2>
+
+    <div class="mt-8 inline-flex flex-col items-center gap-2">
+      <span class="rounded-full bg-maroon px-6 py-2 font-display text-lg font-semibold text-cream">
+        📍 Orange County, CA
+      </span>
+      <span class="font-body text-sm text-maroon/70">Primary service area</span>
+    </div>
+
+    <p class="mt-8 font-body text-sm font-medium uppercase tracking-wide text-maroon/60">Also serving</p>
+    <div class="mt-3 flex flex-wrap justify-center gap-3">
+      {otherAreas.map((area) => (
+        <span class="rounded-full border-2 border-rose px-5 py-2 font-body text-sm font-semibold text-rose">
+          {area}
+        </span>
+      ))}
+      <span class="rounded-full border-2 border-rose px-5 py-2 font-body text-sm font-semibold text-rose">
+        Surrounding communities
+      </span>
+    </div>
+  </div>
+</section>
