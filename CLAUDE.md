@@ -81,8 +81,8 @@ codebase.
 
 ### Known layout gotchas (read before touching `Nav.astro`)
 
-The nav bar has been the source of two real, previously-shipped bugs — keep both in mind for any
-future nav changes:
+The nav bar has been the source of several real, previously-shipped bugs — keep all of these in
+mind for any future nav changes:
 
 1. A flex child that's allowed to `shrink` below its content's natural width does **not** visually
    truncate — with `whitespace-nowrap` and no `overflow-hidden`, the overflowing text renders
@@ -92,9 +92,47 @@ future nav changes:
    desktop nav links + phone pills didn't have enough room and overflowed the page at real tablet
    widths (e.g. 768px iPad portrait). Don't move this back to `md` without re-verifying at
    768–900px widths with an actual browser, not just visual inspection of the markup.
+3. The mobile phone-circle and hamburger buttons are visually 32px (`h-8 w-8`) but need a larger
+   *tappable* area for touch comfort. Rather than growing the visible box (which reintroduces the
+   320px-width overflow problem from gotcha #1/#2), they use a `relative` + `before:absolute
+   before:-inset-*` pseudo-element to enlarge the invisible hit area without affecting layout flow.
+   Gotcha within the gotcha: for the rightmost element (the hamburger), an equal `-inset-2` on all
+   sides pushes the invisible hit-box past the viewport's right edge, which Chromium counts toward
+   `document.scrollWidth` — causing real (if invisible) horizontal overflow. That's why the
+   hamburger's expansion is asymmetric (`before:-left-2 before:-top-2 before:-bottom-2 before:right-0`,
+   no rightward expansion). Any new edge-adjacent tap target needs the same asymmetric treatment,
+   verified with `document.documentElement.scrollWidth` at 320px, not just visual inspection.
+
+### Accessibility is an audited, real requirement here
+
+This site was WAVE-audited and had real WCAG AA failures fixed (36 low-contrast errors, a missing
+form label, a false-positive "possible heading"). Don't regress these:
+
+- **Contrast is load-bearing, not aesthetic.** The `rose`/`rose-dark` hex values in
+  `src/styles/global.css` were computed, not picked by eye, to clear 4.5:1 against both `cream` and
+  `white` (and `rose` as a *background* clears 4.5:1 against white text too — it's used both ways).
+  Before changing either value, or introducing any new text/background color pairing anywhere in
+  the site, compute the actual WCAG contrast ratio (relative luminance formula) rather than
+  eyeballing it — plain pink/light colors in this brand palette have repeatedly failed AA in
+  practice. `blush` and `maroon` are already compliant as currently used; don't assume a new usage
+  of them automatically is too.
+- **Heading structure is exactly 1 `h1`, 6 `h2`, 8 `h3` across the page** (verified by counting
+  actual rendered headings, not by reading component files in isolation). If you add/remove a
+  section, keep this in mind — and if any bold/large non-heading text starts looking heading-like,
+  prefer de-emphasizing its weight/size (as done for the Nav/Footer brand wordmark, `font-semibold`
+  → `font-medium`) over either adding a spurious heading tag or leaving it ambiguous.
+- **The Formspree honeypot field (`name="_gotcha"` in `QuoteForm.astro`) is `aria-hidden="true"`.**
+  Don't add a visible label to it (defeats the point of a decoy field) and don't remove
+  `aria-hidden` (an unlabeled input is an accessibility error) — this is the correct combination.
 
 ### Brand tokens
 
-Colors/fonts are Tailwind v4 theme variables in `src/styles/global.css` (`@theme` block): `blush`,
-`rose`, `rose-dark`, `maroon`, `cream` for color, `font-display` (Playfair Display, for headings/
-buttons) and `font-body` (Inter). Reuse these tokens rather than introducing new colors/fonts.
+Colors/fonts are Tailwind v4 theme variables in `src/styles/global.css` (`@theme` block):
+- `blush` (`#e8b4c0`) — light tint, backgrounds/borders only, not used as text.
+- `rose` (`#a8496d`) / `rose-dark` (`#8f3a56`, hover state) — the main brand accent, used as both
+  text color and button/section background; see the contrast note above before changing.
+- `maroon` (`#5c2a3a`) — near-black-equivalent for this palette, safe as text almost anywhere.
+- `cream` (`#fdf8f4`) — near-white page background.
+- `font-display` (Playfair Display, for headings/buttons) and `font-body` (Inter).
+
+Reuse these tokens rather than introducing new colors/fonts.
