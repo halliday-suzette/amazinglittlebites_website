@@ -30,20 +30,21 @@ real photos as they become available:
 ## Connecting the quote form to Formspree
 
 The "Get a Free Quote" form (`src/components/QuoteForm.astro`) posts to
-[Formspree](https://formspree.io) but ships with a placeholder form ID. To go live:
+[Formspree](https://formspree.io) and is already wired up to a live form
+(`https://formspree.io/f/mykrnkjz`). Submissions arrive in the connected Formspree inbox with the
+subject "New Quote Request - Amazing Little Bites".
 
-1. Sign up for a free account at [formspree.io](https://formspree.io).
-2. Create a new form in the Formspree dashboard.
-3. Copy the form ID Formspree gives you (it looks like `xayzabcd`).
-4. Open `src/components/QuoteForm.astro` and replace `YOUR_FORM_ID` in the `<form action="...">`
-   attribute with your real form ID:
+To switch to a different Formspree form later:
+
+1. Sign up/log in at [formspree.io](https://formspree.io) and create (or open) a form.
+2. Copy its form ID (it looks like `xayzabcd`).
+3. Open `src/components/QuoteForm.astro` and replace the ID in the `<form action="...">` attribute:
 
    ```astro
    <form action="https://formspree.io/f/YOUR_ACTUAL_ID" method="POST" ...>
    ```
 
-5. Rebuild/redeploy the site. Submissions will arrive in your Formspree inbox with the subject
-   "New Quote Request - Amazing Little Bites".
+4. Rebuild/redeploy the site.
 
 The form already includes a hidden honeypot field (`_gotcha`) for spam protection and submits via
 `fetch` with `Accept: application/json`, so visitors see an inline "Thanks! We'll be in touch
