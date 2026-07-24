@@ -37,7 +37,15 @@ GitHub Actions deploy workflow runs `npm run build` via `withastro/action`, so a
 reach production. Run `npm run check:i18n` to check it standalone without a full build. The script
 imports `translations.ts` directly at runtime using Node's native TypeScript stripping (works on
 Node ≥23.6 without any build step or extra dependency — this repo intentionally has no TypeScript
-tooling otherwise, see the note in Commands above about no `astro check`).
+tooling otherwise, see the note in Commands above about no `astro check`). Because that's a
+hard version floor, `package.json` declares `"engines": { "node": ">=23.6.0" }` and
+`.github/workflows/deploy.yml` pins `withastro/action`'s `node-version: "24"` input explicitly —
+without that pin the action's own default (Node 20 at time of writing) predates the ≥23.6 floor and
+`prebuild` fails in CI with `ERR_UNKNOWN_FILE_EXTENSION` on `translations.ts`, even though the exact
+same command succeeds locally on a newer Node. This is a real failure mode this project hit once:
+verifying the script and the build locally is not sufficient proof it works in CI if the local Node
+version and the CI-default Node version differ — check what Node version `withastro/action` (or any
+other CI step) actually resolves to, don't assume it matches your dev machine.
 
 ## Big picture
 
