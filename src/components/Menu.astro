@@ -1,5 +1,6 @@
 ---
 import { getDictionary, type Lang } from "../i18n/translations";
+import { SNACK_CART_ITEMS, BARTENDING_ITEM } from "../data/menuItems";
 
 interface Props {
   lang?: Lang;
@@ -8,20 +9,7 @@ interface Props {
 const { lang = "en" } = Astro.props;
 const t = getDictionary(lang);
 
-const BARTENDING_ITEM = "Mobile Bartending / Mobile Coffee Cart";
-
-const snackCarts = [
-  "Mini-Pancakes Bar",
-  "La Maruchan Bar",
-  "Esquite Bar",
-  "Tosti-Loco Bar (Cup/Bag)",
-  "Ice Cream Sandwich Bar",
-  "Chunky Brownie Sundae",
-  "Charcuterie (Cheese) Board Bar",
-  "Mini Churros Bar",
-  "Little Taco Bar / Bacon Hot Dog Bar",
-  BARTENDING_ITEM,
-];
+const snackCarts = SNACK_CART_ITEMS;
 
 const hydrationBar = [
   "Mangonada",

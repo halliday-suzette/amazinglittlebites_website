@@ -85,6 +85,8 @@ const en = {
       guestCount: "Estimated Guest Count",
       message: "Describe Your Event",
       selectEventType: "Select an event type",
+      snackCartItems: "Snack Cart Items",
+      snackCartItemsHelp: "Choose up to 3",
     },
     eventTypes: [
       { value: "Quinceañera", label: "Quinceañera" },
@@ -204,6 +206,8 @@ const es: typeof en = {
       guestCount: "Número Estimado de Invitados",
       message: "Cuéntanos sobre tu Evento",
       selectEventType: "Selecciona un tipo de evento",
+      snackCartItems: "Artículos del Carrito de Antojitos",
+      snackCartItemsHelp: "Elige hasta 3",
     },
     eventTypes: [
       { value: "Quinceañera", label: "Quinceañera" },

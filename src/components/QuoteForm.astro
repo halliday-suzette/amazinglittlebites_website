@@ -1,5 +1,6 @@
 ---
 import { getDictionary, type Lang } from "../i18n/translations";
+import { SNACK_CART_ITEMS } from "../data/menuItems";
 
 interface Props {
   lang?: Lang;
@@ -122,6 +123,24 @@ const PHONES = [
         </div>
       </div>
 
+      <fieldset class="rounded-lg border border-blush p-4">
+        <legend class="px-1 font-body text-sm font-medium text-maroon">{t.quoteForm.fields.snackCartItems}</legend>
+        <p class="mb-3 font-body text-xs text-maroon/80">{t.quoteForm.fields.snackCartItemsHelp}</p>
+        <div id="snack-cart-items" class="grid gap-2 sm:grid-cols-2">
+          {SNACK_CART_ITEMS.map((item) => (
+            <label class="flex items-start gap-2 font-body text-sm text-maroon">
+              <input
+                type="checkbox"
+                name="snack_cart_items"
+                value={item}
+                class="peer mt-0.5 h-4 w-4 shrink-0 accent-rose disabled:cursor-not-allowed disabled:opacity-50"
+              />
+              <span class="peer-disabled:opacity-50">{item}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
       <div>
         <label for="message" class="block font-body text-sm font-medium text-maroon">{t.quoteForm.fields.message}</label>
         <textarea
@@ -161,6 +180,20 @@ const PHONES = [
   }
 
   const messages: FormMessages = JSON.parse(form?.dataset.messages ?? "{}");
+
+  const SNACK_ITEM_LIMIT = 3;
+  const snackCheckboxes = form?.querySelectorAll<HTMLInputElement>('input[name="snack_cart_items"]');
+
+  function updateSnackCheckboxLimit() {
+    if (!snackCheckboxes) return;
+    const checkedCount = Array.from(snackCheckboxes).filter((cb) => cb.checked).length;
+    const atLimit = checkedCount >= SNACK_ITEM_LIMIT;
+    snackCheckboxes.forEach((cb) => {
+      if (!cb.checked) cb.disabled = atLimit;
+    });
+  }
+
+  snackCheckboxes?.forEach((cb) => cb.addEventListener("change", updateSnackCheckboxLimit));
 
   const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const PHONE_REGEX = /^[\d\s()+.-]{7,}$/;
@@ -247,6 +280,7 @@ const PHONES = [
       if (response.ok) {
         setStatus(messages.success, false);
         form.reset();
+        updateSnackCheckboxLimit();
       } else {
         setStatus(messages.error, true);
       }
