@@ -52,35 +52,45 @@ soon" message (or an inline error) without leaving the page.
 
 ## Deploying to GitHub Pages
 
-The site is preconfigured as a GitHub Pages **project site** for
-`halliday-suzette/amazinglittlebites_website`, served at:
+The site is a GitHub Pages site for `halliday-suzette/amazinglittlebites_website`, served at the
+custom domain:
 
 ```
-https://halliday-suzette.github.io/amazinglittlebites_website/
+https://amazinglittlebites.com
 ```
 
 This is wired up via:
 
-- `astro.config.mjs` sets `site` and `base: '/amazinglittlebites_website/'` so every generated
-  link, script, and optimized image resolves under that subpath instead of the domain root.
+- `astro.config.mjs` sets `site: 'https://amazinglittlebites.com'` with **no `base`** — a custom
+  domain serves from the root, so every generated link/script/image resolves as a plain
+  root-relative path (`/favicon.jpg`, `/_astro/...`), not under a `/reponame/` subpath.
+- `public/CNAME` contains `amazinglittlebites.com`. Astro copies everything in `public/` verbatim
+  into `dist/`, so this file rides along in every deployed build — required because deployment
+  goes through GitHub Actions (not "deploy from a branch"), so the custom domain must be part of
+  the build artifact itself rather than only set via the Pages UI.
 - `public/.nojekyll` tells GitHub Pages not to run the output through Jekyll (which would
   otherwise ignore Astro's `_astro/` assets folder because it starts with an underscore).
 - `.github/workflows/deploy.yml` builds the site with the official `withastro/action` on every
   push to `main` and publishes it with GitHub's `actions/deploy-pages`.
+- DNS (at the registrar managing `amazinglittlebites.com`): four `A` records on the apex (`@`)
+  pointing to GitHub Pages' IPs (`185.199.108.153`, `.109.153`, `.110.153`, `.111.153`), and a
+  `CNAME` record for `www` pointing to `halliday-suzette.github.io.` so the `www` variant also
+  resolves and redirects correctly.
 
 **One-time setup in GitHub:**
 
 1. Push this repo to GitHub (already done, if you're reading this from the deployed repo).
 2. In the repo, go to **Settings → Pages**.
 3. Under **Build and deployment → Source**, select **GitHub Actions** (not "Deploy from a branch").
-4. Push to `main` (or run the workflow manually from the **Actions** tab) — the site will build
-   and deploy automatically. The first run also finishes registering the Pages site.
+4. Under **Custom domain**, enter `amazinglittlebites.com` and save (GitHub verifies it against
+   the DNS `A` records above), then check **Enforce HTTPS** once it's available.
+5. Push to `main` (or run the workflow manually from the **Actions** tab) — the site will build
+   and deploy automatically.
 
-**If you switch to a custom domain later:** add a `public/CNAME` file containing the domain, set
-`site` in `astro.config.mjs` to `https://your-domain.com`, and remove the `base` setting (a custom
-domain serves from the root, not a `/amazinglittlebites_website/` subpath) — then update the
-`favicon.png` href in `src/layouts/Layout.astro` back to a plain `"/favicon.png"` if you remove
-`BASE_URL` usage. Re-run `npm run build` locally afterward to confirm no broken asset paths.
+**If you ever move off the custom domain back to a GitHub Pages project-page URL:** delete
+`public/CNAME`, set `base` back to `/amazinglittlebites_website/` in `astro.config.mjs`, and set
+`site` back to `https://halliday-suzette.github.io`. Re-run `npm run build` locally afterward and
+confirm none of the generated asset paths in `dist/index.html` are broken before deploying.
 
 ## English / Spanish (bilingual site)
 
