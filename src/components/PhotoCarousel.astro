@@ -1,0 +1,216 @@
+---
+import { Image } from "astro:assets";
+import { getDictionary, type Lang } from "../i18n/translations";
+
+interface Props {
+  lang?: Lang;
+}
+
+const { lang = "en" } = Astro.props;
+const t = getDictionary(lang);
+
+const imageModules = import.meta.glob<{ default: ImageMetadata }>(
+  "../assets/images/carousel/*.{jpg,jpeg,png,webp,avif}",
+  { eager: true }
+);
+
+const images = Object.keys(imageModules)
+  .sort((a, b) => a.localeCompare(b))
+  .map((path, index) => {
+    const filename = path.split("/").pop() ?? path;
+    const alt = t.carousel.altByFile[filename as keyof typeof t.carousel.altByFile] ?? t.carousel.altFallback(index + 1);
+    return { src: imageModules[path].default, alt };
+  });
+---
+
+{images.length > 0 && (
+  <section id="gallery" class="px-4 py-14 sm:px-6">
+    <div class="mx-auto max-w-3xl text-center">
+      <h2 class="font-display text-2xl font-bold text-rose sm:text-3xl">{t.carousel.heading}</h2>
+    </div>
+
+    <div
+      id="photo-carousel"
+      class="relative mx-auto mt-8 max-w-3xl"
+      data-count={images.length}
+    >
+      <div class="relative overflow-hidden rounded-2xl shadow-md ring-1 ring-blush/50">
+        <div id="carousel-track" class="flex">
+          {images.map((image, i) => (
+            <div class="aspect-[4/3] max-h-[420px] w-full shrink-0 overflow-hidden">
+              <Image
+                src={image.src}
+                alt={image.alt}
+                width={1200}
+                loading={i === 0 ? "eager" : "lazy"}
+                class="h-full w-full object-cover"
+              />
+            </div>
+          ))}
+        </div>
+
+        {images.length > 1 && (
+          <>
+            <button
+              type="button"
+              id="carousel-prev"
+              aria-label={t.carousel.prevAria}
+              class="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/85 p-2 text-rose shadow-md transition hover:bg-white hover:text-rose-dark focus:outline-none focus:ring-2 focus:ring-rose focus:ring-offset-2"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              id="carousel-next"
+              aria-label={t.carousel.nextAria}
+              class="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/85 p-2 text-rose shadow-md transition hover:bg-white hover:text-rose-dark focus:outline-none focus:ring-2 focus:ring-rose focus:ring-offset-2"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 18l6-6-6-6" />
+              </svg>
+            </button>
+          </>
+        )}
+      </div>
+
+      {images.length > 1 && (
+        <div id="carousel-dots" class="mt-4 flex items-center justify-center gap-2">
+          {images.map((_, i) => (
+            <button
+              type="button"
+              class="carousel-dot h-2.5 w-2.5 rounded-full bg-blush transition focus:outline-none focus:ring-2 focus:ring-rose focus:ring-offset-2"
+              data-index={i}
+              aria-label={t.carousel.goToSlideAria(i + 1)}
+              aria-current={i === 0 ? "true" : "false"}
+            ></button>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+)}
+
+<script>
+  const root = document.getElementById("photo-carousel");
+  const track = document.getElementById("carousel-track") as HTMLDivElement | null;
+  const prevBtn = document.getElementById("carousel-prev");
+  const nextBtn = document.getElementById("carousel-next");
+  const dots = Array.from(document.querySelectorAll<HTMLButtonElement>(".carousel-dot"));
+
+  if (root && track) {
+    const count = Number(root.dataset.count ?? "0");
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const AUTO_ADVANCE_MS = 4500;
+    const SWIPE_THRESHOLD_PX = 40;
+
+    let index = 0;
+    let timer: ReturnType<typeof setInterval> | null = null;
+
+    track.style.transition = prefersReducedMotion ? "none" : "transform 500ms ease-in-out";
+
+    function render() {
+      if (!track) return;
+      track.style.transform = `translateX(-${index * 100}%)`;
+      dots.forEach((dot, i) => {
+        const active = i === index;
+        dot.setAttribute("aria-current", active ? "true" : "false");
+        dot.classList.toggle("bg-rose", active);
+        dot.classList.toggle("bg-blush", !active);
+      });
+    }
+
+    function goTo(newIndex: number) {
+      if (count === 0) return;
+      index = ((newIndex % count) + count) % count;
+      render();
+    }
+
+    function next() {
+      goTo(index + 1);
+    }
+
+    function prev() {
+      goTo(index - 1);
+    }
+
+    function startAutoplay() {
+      if (prefersReducedMotion || count <= 1) return;
+      stopAutoplay();
+      timer = setInterval(next, AUTO_ADVANCE_MS);
+    }
+
+    function stopAutoplay() {
+      if (timer !== null) {
+        clearInterval(timer);
+        timer = null;
+      }
+    }
+
+    prevBtn?.addEventListener("click", () => {
+      prev();
+      startAutoplay();
+    });
+    nextBtn?.addEventListener("click", () => {
+      next();
+      startAutoplay();
+    });
+    dots.forEach((dot) => {
+      dot.addEventListener("click", () => {
+        goTo(Number(dot.dataset.index ?? "0"));
+        startAutoplay();
+      });
+    });
+
+    root.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        prev();
+        startAutoplay();
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        next();
+        startAutoplay();
+      }
+    });
+
+    root.addEventListener("mouseenter", stopAutoplay);
+    root.addEventListener("mouseleave", startAutoplay);
+    root.addEventListener("focusin", stopAutoplay);
+    root.addEventListener("focusout", startAutoplay);
+
+    let touchStartX = 0;
+    let touchDeltaX = 0;
+
+    track.addEventListener(
+      "touchstart",
+      (event) => {
+        touchStartX = event.touches[0].clientX;
+        touchDeltaX = 0;
+        stopAutoplay();
+      },
+      { passive: true }
+    );
+
+    track.addEventListener(
+      "touchmove",
+      (event) => {
+        touchDeltaX = event.touches[0].clientX - touchStartX;
+      },
+      { passive: true }
+    );
+
+    track.addEventListener("touchend", () => {
+      if (touchDeltaX > SWIPE_THRESHOLD_PX) {
+        prev();
+      } else if (touchDeltaX < -SWIPE_THRESHOLD_PX) {
+        next();
+      }
+      startAutoplay();
+    });
+
+    render();
+    startAutoplay();
+  }
+</script>

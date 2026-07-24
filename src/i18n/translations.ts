@@ -49,6 +49,23 @@ const en = {
         "Pair your dessert cart with our trusted bartending partner for a complete celebration experience. Ask us about bundling La Familia Bartending Services with your quote.",
     },
   },
+  carousel: {
+    heading: "See Us in Action",
+    prevAria: "Previous image",
+    nextAria: "Next image",
+    goToSlideAria: (n: number) => `Go to image ${n}`,
+    altFallback: (n: number) => `Amazing Little Bites event photo ${n}`,
+    altByFile: {
+      "ALB 15 Birthday Party Set up Evening lighting.jpg":
+        "Amazing Little Bites snack cart set up outdoors at night with string lights for a 15th birthday celebration",
+      "ALB Cup Noodle Soup NIght time pics.png":
+        "Rows of cup noodles arranged on the snack cart for a nighttime event",
+      "ALB Cup Noodle with Sauces.png":
+        "Cup noodle bar with assorted hot sauces and toppings at an indoor event",
+      "ALB MARUCHAN CUPS.png": "Maruchan instant lunch cups topped with chamoy, chips, and lime at an event",
+      "Cinnamoroll Cart.png": "Snack cart decorated with a Cinnamoroll theme, set up outdoors at dusk",
+    },
+  },
   menu: {
     heading: "Our Menu",
     snackCartsTitle: "Snack Carts",
@@ -169,6 +186,23 @@ const es: typeof en = {
       title: "La Familia Bartending Services",
       description:
         "Combina tu carrito de postres con nuestro socio de confianza en bartending para una experiencia completa. Pregúntanos cómo incluir La Familia Bartending Services en tu cotización.",
+    },
+  },
+  carousel: {
+    heading: "Míranos en Acción",
+    prevAria: "Imagen anterior",
+    nextAria: "Siguiente imagen",
+    goToSlideAria: (n: number) => `Ir a la imagen ${n}`,
+    altFallback: (n: number) => `Foto de un evento de Amazing Little Bites ${n}`,
+    altByFile: {
+      "ALB 15 Birthday Party Set up Evening lighting.jpg":
+        "Carrito de antojitos de Amazing Little Bites instalado al aire libre por la noche con luces festivas para una celebración de 15 años",
+      "ALB Cup Noodle Soup NIght time pics.png":
+        "Hileras de vasos de sopa instantánea acomodados en el carrito para un evento nocturno",
+      "ALB Cup Noodle with Sauces.png":
+        "Barra de sopa instantánea con salsas variadas y aderezos en un evento bajo techo",
+      "ALB MARUCHAN CUPS.png": "Vasos de Maruchan Instant Lunch preparados con chamoy, frituras y limón en un evento",
+      "Cinnamoroll Cart.png": "Carrito de antojitos decorado con temática de Cinnamoroll, instalado al aire libre al atardecer",
     },
   },
   menu: {

@@ -124,6 +124,38 @@ dependency needed). If the logo is ever swapped again, regenerate `og-image.jpg`
 rather than copying the raw logo file over it, and keep `og:image:width`/`height` in
 `Layout.astro` in sync with whatever canvas size you actually output.
 
+### Photo carousel
+
+`PhotoCarousel.astro` (rendered between `About` and `Services` on both `index.astro` and
+`es/index.astro`) renders every image file in `src/assets/images/carousel/` as a swipeable,
+auto-advancing carousel. The image list is **not hardcoded** — it's built at build time via
+`import.meta.glob("../assets/images/carousel/*.{jpg,jpeg,png,webp,avif}", { eager: true })`, sorted
+alphabetically by filename. Dropping a new image into that folder (or removing one) automatically
+changes the carousel on the next build, no code change needed. Each image goes through `astro:assets`
+`<Image />` for optimization (the same pipeline as the logo — see "Images" above), so a raw 2-3MB PNG
+dropped into the folder gets compressed to a ~100-170KB WebP automatically.
+
+Alt text is looked up by exact filename in `t.carousel.altByFile` (an object in `translations.ts`,
+one entry per language) — this is why alt text is real, specific, and translated for the 5 images
+that shipped with this feature, instead of generic. If a new image is added whose filename isn't a
+key in `altByFile`, the component automatically falls back to `t.carousel.altFallback(n)` (e.g. "Amazing
+Little Bites event photo 3" / "Foto de un evento de Amazing Little Bites 3") rather than failing —
+but that fallback is a placeholder, not a real description, so treat "add a photo" and "write its
+alt text in both `altByFile` entries" as one task, not two.
+
+The carousel is vanilla JS (a `<script>` block in the component, no library): auto-advance every
+4.5s, pauses on `mouseenter`/`focusin` (not just hover — keyboard focus pauses it too, since a
+sighted keyboard user tabbing through prev/next/dots shouldn't fight an advancing carousel), real
+touch swipe via `touchstart`/`touchmove`/`touchend` on the track element, and infinite wraparound
+in both directions. It respects `prefers-reduced-motion`: when set, autoplay never starts and the
+track's CSS `transition` is set to `none` (instant slide changes only on manual nav, no animation).
+Verified with Playwright across mobile/tablet/desktop viewports, both languages, and a
+`reducedMotion: "reduce"` browser context — see git history for the test script if this needs
+re-verifying after a future change.
+
+Adding this section changed the page's heading count — see the WCAG heading-count note below,
+already updated to `7 h2` to include the carousel's "See Us in Action" / "Míranos en Acción" heading.
+
 ### Contact form
 
 `QuoteForm.astro` posts to a live Formspree endpoint (`https://formspree.io/f/mykrnkjz`) via
@@ -183,7 +215,7 @@ form label, a false-positive "possible heading"). Don't regress these:
   eyeballing it — plain pink/light colors in this brand palette have repeatedly failed AA in
   practice. `blush` and `maroon` are already compliant as currently used; don't assume a new usage
   of them automatically is too.
-- **Heading structure is exactly 1 `h1`, 6 `h2`, 8 `h3` across the page** (verified by counting
+- **Heading structure is exactly 1 `h1`, 7 `h2`, 8 `h3` across the page** (verified by counting
   actual rendered headings, not by reading component files in isolation). If you add/remove a
   section, keep this in mind — and if any bold/large non-heading text starts looking heading-like,
   prefer de-emphasizing its weight/size (as done for the Nav/Footer brand wordmark, `font-semibold`
