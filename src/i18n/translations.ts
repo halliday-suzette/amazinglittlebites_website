@@ -115,6 +115,7 @@ const en = {
     websiteBy: "Website by",
     instagramAria: "Amazing Little Bites on Instagram",
     facebookAria: "Amazing Little Bites on Facebook",
+    tiktokAria: "Amazing Little Bites on TikTok",
   },
   langToggle: {
     switchAria: "View this site in Spanish",
@@ -236,6 +237,7 @@ const es: typeof en = {
     websiteBy: "Sitio web por",
     instagramAria: "Amazing Little Bites en Instagram",
     facebookAria: "Amazing Little Bites en Facebook",
+    tiktokAria: "Amazing Little Bites en TikTok",
   },
   langToggle: {
     switchAria: "Ver este sitio en inglés",
