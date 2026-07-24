@@ -119,7 +119,10 @@ How it's wired up:
   Spanish, not Spain Spanish) so search engines and shared links treat the two pages correctly.
 
 **To add or edit copy:** update the matching key in both the `en` and `es` objects in
-`src/i18n/translations.ts` — components will pick up the change automatically on rebuild.
+`src/i18n/translations.ts` — components will pick up the change automatically on rebuild. If you
+forget to update one language, `npm run build` will catch it: a `prebuild` check
+(`npm run check:i18n` to run it on its own) automatically verifies `en` and `es` have the exact
+same keys/array lengths and fails the build with the exact missing path if they don't.
 
 **To add a third language:** add a new locale object to `translations.ts` (matching the same
 shape as `en`/`es`), extend the `Lang` type, add a new `src/pages/<code>/index.astro` mirroring

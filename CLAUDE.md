@@ -20,6 +20,25 @@ When verifying UI changes, prefer an actual headless-browser check (Playwright, 
 reading the markup — this project has repeatedly had bugs that were invisible in the DOM/markup but
 visible only when rendered (see "Known layout gotchas" below).
 
+**Rule: no English-only (or Spanish-only) text edits.** This site is bilingual (see "Bilingual"
+below) — every change to user-facing copy must be made in both `en` and `es` in the same edit, no
+exceptions. Before calling a copy change done: (1) confirm you edited both objects in
+`src/i18n/translations.ts` (or both string literals, for the handful of intentionally-untranslated
+proper nouns — see "Bilingual" for which is which), and (2) view or screenshot both `/` and `/es/`
+to confirm the change actually landed on both pages, not just one.
+
+This rule has a technical backstop, not just an instruction: `npm run build` automatically runs
+`scripts/check-i18n-parity.mjs` first (wired up via npm's `prebuild` lifecycle hook — see
+`package.json`), which recursively diffs the *shape* of `translations.ts`'s `en` and `es` objects
+(same keys at every level, same array lengths) and fails the build with the exact offending path
+if they've drifted apart. It does **not** check string content (that would defeat the point — the
+languages are supposed to say different things), only structure. This also runs in CI, since the
+GitHub Actions deploy workflow runs `npm run build` via `withastro/action`, so a parity break can't
+reach production. Run `npm run check:i18n` to check it standalone without a full build. The script
+imports `translations.ts` directly at runtime using Node's native TypeScript stripping (works on
+Node ≥23.6 without any build step or extra dependency — this repo intentionally has no TypeScript
+tooling otherwise, see the note in Commands above about no `astro check`).
+
 ## Big picture
 
 This is a static one-page brochure site for "Amazing Little Bites," a dessert/snack cart catering
@@ -31,7 +50,8 @@ Pages**, served at the custom domain `amazinglittlebites.com`, via GitHub Action
 ### Bilingual: two real pages, one dictionary
 
 The site ships in English (`/`) and Mexican Spanish (`/es/`) as two separate static pages (not a
-client-side text swap), so each is independently indexable/shareable:
+client-side text swap), so each is independently indexable/shareable. **Every text change must be
+applied to both languages — see the rule in "Commands" above.** In practice that means:
 
 - `src/i18n/translations.ts` holds one `en` and one `es` object with every piece of UI copy.
   `getDictionary(lang)` returns the right one. This is the single source of truth for all text —

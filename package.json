@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
+    "prebuild": "node scripts/check-i18n-parity.mjs",
     "build": "astro build",
+    "check:i18n": "node scripts/check-i18n-parity.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },
