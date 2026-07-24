@@ -113,7 +113,7 @@ How it's wired up:
 - Menu item names (e.g. "Agua de Horchata", "Esquite Bar") are intentionally **not** translated in
   either language — they're the business's actual product names, kept authentic on both pages.
 - The Formspree quote-request `event_type` field submits a canonical English value (e.g.
-  `"Wedding"`) regardless of which language the visitor used, so J.C./Nicole always see
+  `"Wedding"`) regardless of which language the visitor used, so Julio/Nicole always see
   consistent values in their inbox — only the on-page label is translated (e.g. "Boda").
 - `Layout.astro` adds `hreflang`/canonical tags and `og:locale` (`es_MX`, not `es_ES` — Mexican
   Spanish, not Spain Spanish) so search engines and shared links treat the two pages correctly.

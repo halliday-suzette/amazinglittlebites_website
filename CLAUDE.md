@@ -25,8 +25,8 @@ visible only when rendered (see "Known layout gotchas" below).
 This is a static one-page brochure site for "Amazing Little Bites," a dessert/snack cart catering
 business, built with **Astro** (static output, no SSR/server) and **Tailwind CSS v4** (via
 `@tailwindcss/vite`, CSS-first config — there is no `tailwind.config.js`). It deploys to **GitHub
-Pages** as a project site via GitHub Actions (`.github/workflows/deploy.yml`, using
-`withastro/action` + `actions/deploy-pages`).
+Pages**, served at the custom domain `amazinglittlebites.com`, via GitHub Actions
+(`.github/workflows/deploy.yml`, using `withastro/action` + `actions/deploy-pages`).
 
 ### Bilingual: two real pages, one dictionary
 
@@ -43,7 +43,20 @@ client-side text swap), so each is independently indexable/shareable:
   same components with `lang="en"` / `lang="es"` respectively — when adding a new section to the
   page, add it to **both** files.
 - Menu item names (e.g. "Esquite Bar", "Agua de Horchata") are intentionally identical in both
-  languages — they're the business's actual product names, not translated.
+  languages — they're the business's actual product names, not translated. The exception is a
+  non-product entry like `menu.customAguaRequest` ("Make Your Own Aguas Request..." /
+  "Solicitud de Aguas Personalizadas...") — that's descriptive/instructional text, not a dish
+  name, so it goes through the dictionary and gets a real translation like everything else. When
+  adding a new item to `Menu.astro`'s `snackCarts`/`hydrationBar` arrays, decide which category it
+  is: a proper-noun product name (hardcode the same string, used as-is in both languages) or
+  descriptive copy (add a dictionary key instead).
+- Same-page anchor links (e.g. the Menu section's cross-reference to Services) must stay a bare
+  fragment — `href="#services"`, never `href="/#services"`. Because each language is its own full
+  page with its own copy of every section `id`, an absolute-rooted `/#services` would send a
+  visitor on `/es/` away to the *English* root page instead of scrolling within `/es/` itself. A
+  bare `#services` is already relative (no domain, no locale prefix) and always resolves against
+  whichever language page it's rendered on — verified by clicking it on both `/` and `/es/` and
+  confirming the URL stays `/#services` / `/es/#services` respectively, not jumping pages.
 - The quote form's `event_type` field submits a canonical English `value` regardless of display
   language (so the business always gets consistent values in their inbox); only the visible
   `label` is translated. Follow this pattern for any other business-facing data field.
@@ -52,23 +65,36 @@ client-side text swap), so each is independently indexable/shareable:
 - To add a third locale: add a matching object to `translations.ts`, extend the `Lang` type, add
   `src/pages/<code>/index.astro`, and add a segment to the toggle bar in `Nav.astro`.
 
-### GitHub Pages base path
+### GitHub Pages, custom domain
 
-`astro.config.mjs` sets `site` and `base: '/amazinglittlebites_website/'` since this is a project
-site (not a custom domain or user/org site). Any hardcoded root-absolute path (e.g. `href="/x"`)
-will break under this base path — use `import.meta.env.BASE_URL` (see the favicon link in
-`Layout.astro`, or the `enHref`/`esHref` computation in `Nav.astro`) or Astro's asset pipeline
-(`astro:assets`, which handles this automatically), never a bare `/`-prefixed path.
+The site is served at the custom domain `https://amazinglittlebites.com`, set via `site` in
+`astro.config.mjs` and `public/CNAME` — there is **no `base`** (a custom domain serves from the
+root, unlike a `username.github.io/reponame/` project-page URL, which is what this site used
+before the domain migration). Any root-absolute path should still go through
+`import.meta.env.BASE_URL` (see the favicon link in `Layout.astro`, or `enHref`/`esHref` in
+`Nav.astro`) rather than a bare `/`-prefixed string — `BASE_URL` just resolves to `/` now, but
+this keeps the code portable if the site ever moves back to a project-page URL (see the README's
+"Deploying to GitHub Pages" section for exactly what to change if that happens).
 `public/.nojekyll` is required so GitHub Pages doesn't mangle Astro's `_astro/` output folder.
 
 ### Images
 
 Real images (logo, favicon, OG share image) are imported through `astro:assets` (`<Image />`) so
-they get optimized/hashed at build time — see `src/assets/logo.jpg` used by `Nav`/`Hero`/`Footer`.
+they get optimized/hashed at build time — see `src/assets/logo.png` used by `Nav`/`Hero`/`Footer`.
 When an image's rendered box must show the whole image uncropped (like the Hero logo), pass only
 `width` (or only `height`) to `<Image />` and let Astro infer the other dimension from the source's
 real aspect ratio — passing both dimensions with the wrong ratio causes silent cropping. The Menu
 section deliberately has no per-item photos (see README "Adding real photos" for how to add them).
+
+The current logo (`src/assets/logo.png`, also copied to `public/favicon.png`) has a genuine
+transparent (RGBA) background — this is why it looks clean in the Nav/Hero/Footer against any
+section background, but it's also why `public/og-image.jpg` is **not** just a copy of the logo: OG
+share images don't reliably render alpha transparency across social platforms, so that file is a
+separate, pre-composited flatten of the logo onto an opaque `cream` (`#fdf8f4`) 1200×630 canvas
+(built with `sharp`, already resolvable in `node_modules` via Astro's own image deps — no new
+dependency needed). If the logo is ever swapped again, regenerate `og-image.jpg` the same way
+rather than copying the raw logo file over it, and keep `og:image:width`/`height` in
+`Layout.astro` in sync with whatever canvas size you actually output.
 
 ### Contact form
 
@@ -78,6 +104,19 @@ message strings are passed from Astro to the inline `<script>` via a `data-messa
 (JSON-stringified dictionary), read with `JSON.parse` in the script — this pattern (not
 `define:vars`) is how any other language-dependent value should reach client-side script in this
 codebase.
+
+### Contact data (phone names/numbers) is duplicated, not centralized
+
+`Hero.astro`, `Nav.astro`, `Footer.astro`, and `QuoteForm.astro` each declare their own identical
+`PHONES` array literal (currently `Julio` at 714-783-6605 and `Nicole` at 714-783-6615) rather than
+importing one shared source. This is a real, recurring maintenance cost — both prior name
+corrections this project has needed (`Nichole` → `Nicole`, `J.C.` → `Julio`) required editing the
+same 4 files. The names/numbers themselves are plain strings, not part of `translations.ts`,
+because they're proper nouns that don't change between languages — `t.nav.callAria(name, display)`
+and `t.hero.ctaCall(name, display)` just interpolate whatever `name` they're given, so a future
+name/number change only needs the 4 `PHONES` literals updated, not the dictionary. If this data
+changes a third time, consider actually centralizing it (e.g. a `src/data/contacts.ts` export)
+instead of continuing to hand-edit 4 copies.
 
 ### Known layout gotchas (read before touching `Nav.astro`)
 

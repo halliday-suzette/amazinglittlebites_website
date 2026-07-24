@@ -54,6 +54,7 @@ const en = {
     snackCartsTitle: "Snack Carts",
     hydrationBarTitle: "Hydration Bar",
     bartendingCrossRef: "see La Familia Bartending →",
+    customAguaRequest: "Make Your Own Aguas Request (subject to approval)",
     note: "Menu items are customizable — mix and match for your event!",
   },
   howItWorks: {
@@ -172,6 +173,7 @@ const es: typeof en = {
     snackCartsTitle: "Carritos de Antojitos",
     hydrationBarTitle: "Barra de Aguas Frescas",
     bartendingCrossRef: "ver La Familia Bartending →",
+    customAguaRequest: "Solicitud de Aguas Personalizadas (sujeto a aprobación)",
     note: "¡Los antojitos del menú son personalizables — combínalos como quieras para tu evento!",
   },
   howItWorks: {
