@@ -165,6 +165,15 @@ message strings are passed from Astro to the inline `<script>` via a `data-messa
 `define:vars`) is how any other language-dependent value should reach client-side script in this
 codebase.
 
+### Analytics
+
+`Layout.astro` loads [Plausible](https://plausible.io) (privacy-friendly, cookieless analytics) via
+a script tag pair in `<head>`, right before the closing `</head>`: an async loader script
+(`https://plausible.io/js/pa-QWaenrtT-XYAUD5cGXn6-.js`, site-ID baked into the URL) plus a small
+inline `window.plausible` queue shim. Because every page routes through `Layout.astro`, this one
+edit covers both `/` and `/es/` — unlike ordinary user-facing copy, this is not something the
+bilingual-parity rule applies to (no visible/translatable text involved).
+
 ### Contact data (phone names/numbers) is duplicated, not centralized
 
 `Hero.astro`, `Nav.astro`, `Footer.astro`, and `QuoteForm.astro` each declare their own identical
