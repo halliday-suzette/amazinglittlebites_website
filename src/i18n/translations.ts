@@ -4,7 +4,7 @@ const en = {
   meta: {
     title: "Amazing Little Bites | Dessert & Snack Cart Catering",
     description:
-      "We know your sweet spot. Mobile dessert and snack cart catering for quinceañeras, sweet 16s, weddings, and birthdays across Orange County, San Bernardino, and Riverside.",
+      "We know your sweet spot. Mobile dessert and snack cart catering for quinceañeras, sweet 16s, weddings, and birthdays across Orange County, Los Angeles, San Bernardino, and Riverside.",
   },
   nav: {
     home: "Home",
@@ -128,7 +128,7 @@ const en = {
   footer: {
     logoAlt: "Amazing Little Bites logo",
     serving: "Serving:",
-    servingArea: "Orange County, CA (primary) · San Bernardino & Riverside communities",
+    servingArea: "Orange County, CA (primary) · Los Angeles, San Bernardino & Riverside communities",
     office: "Office:",
     copyright: (year: number) => `© ${year} Amazing Little Bites. All rights reserved.`,
     websiteBy: "Website by",
@@ -146,7 +146,7 @@ const es: typeof en = {
   meta: {
     title: "Amazing Little Bites | Carrito de Postres y Antojitos",
     description:
-      "Conocemos tu antojo. Carrito móvil de postres y antojitos para quinceañeras, dulces 16, bodas y cumpleaños en el Condado de Orange, San Bernardino y Riverside.",
+      "Conocemos tu antojo. Carrito móvil de postres y antojitos para quinceañeras, dulces 16, bodas y cumpleaños en el Condado de Orange, Los Ángeles, San Bernardino y Riverside.",
   },
   nav: {
     home: "Inicio",
@@ -270,7 +270,7 @@ const es: typeof en = {
   footer: {
     logoAlt: "Logotipo de Amazing Little Bites",
     serving: "Servimos:",
-    servingArea: "Condado de Orange, CA (principal) · Comunidades de San Bernardino y Riverside",
+    servingArea: "Condado de Orange, CA (principal) · Comunidades de Los Ángeles, San Bernardino y Riverside",
     office: "Oficina:",
     copyright: (year: number) => `© ${year} Amazing Little Bites. Todos los derechos reservados.`,
     websiteBy: "Sitio web por",

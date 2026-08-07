@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import { getDictionary, type Lang } from "../i18n/translations";
+import { SNACK_CART_ITEMS } from "../data/menuItems";
 
 interface Props {
   lang?: Lang;
@@ -18,37 +19,155 @@ const enUrl = new URL(import.meta.env.BASE_URL, Astro.site);
 const esUrl = new URL(`${import.meta.env.BASE_URL}es/`, Astro.site);
 const pageUrl = lang === "es" ? esUrl : enUrl;
 const ogImageUrl = new URL(`${import.meta.env.BASE_URL}og-image.jpg`, Astro.site);
+const logoImageUrl = new URL(`${import.meta.env.BASE_URL}logo-512.png`, Astro.site);
+
+const GBP_CID_URL = "https://www.google.com/maps?cid=7301310323161737617";
 
 const businessSchema = {
   "@context": "https://schema.org",
-  "@type": "CateringBusiness",
-  "@id": "https://amazinglittlebites.com/#business",
-  name: "Amazing Little Bites Event Management",
-  alternateName: "Amazing Little Bites",
-  url: "https://amazinglittlebites.com/",
-  logo: new URL(`${import.meta.env.BASE_URL}favicon.png`, Astro.site).toString(),
-  image: ogImageUrl.toString(),
-  description: t.meta.description,
-  telephone: "+17147836605",
-  email: "Amazinglittlebites24@outlook.com",
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: "Anaheim",
-    addressRegion: "CA",
-    addressCountry: "US",
-  },
-  areaServed: ["Orange County, CA", "San Bernardino County, CA", "Riverside County, CA"],
-  openingHoursSpecification: {
-    "@type": "OpeningHoursSpecification",
-    dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-    opens: "11:00",
-    closes: "20:00",
-  },
-  sameAs: [
-    "https://www.instagram.com/amazinglittle.bites",
-    "https://www.facebook.com/amazingLittle.bites",
-    "https://www.tiktok.com/@amazinglittle.bites",
-    "https://www.google.com/maps/place/Amazing+Little+Bites+Event+Management/@33.8350352,-118.5760035,239731m/data=!3m1!1e3!4m8!3m7!1s0x905bf781484bba5:0x6553770e0ef2a991!8m2!3d33.835649!4d-117.9166221!9m1!1b1!16s%2Fg%2F11zd56c_97",
+  "@graph": [
+    {
+      "@type": "FoodEstablishment",
+      "@id": "https://amazinglittlebites.com/#business",
+      name: "Amazing Little Bites Event Management",
+      alternateName: "Amazing Little Bites",
+      legalName: "Amazing Little Bites Event Management",
+      slogan: "We know your sweet spot",
+      url: "https://amazinglittlebites.com/",
+      description: t.meta.description,
+      logo: {
+        "@type": "ImageObject",
+        "@id": "https://amazinglittlebites.com/#logo",
+        url: logoImageUrl.toString(),
+        width: 512,
+        height: 512,
+        caption: "Amazing Little Bites",
+      },
+      image: [ogImageUrl.toString()],
+      telephone: "+17147836605",
+      email: "Amazinglittlebites24@outlook.com",
+      currenciesAccepted: "USD",
+      knowsLanguage: ["en-US", "es-MX"],
+      servesCuisine: ["Desserts", "Mexican", "Snacks"],
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Anaheim",
+        addressRegion: "CA",
+        addressCountry: { "@type": "Country", name: "US" },
+      },
+      geo: {
+        "@type": "GeoCoordinates",
+        latitude: 33.835649,
+        longitude: -117.9166221,
+      },
+      hasMap: GBP_CID_URL,
+      areaServed: [
+        { "@type": "AdministrativeArea", name: "Orange County, CA" },
+        { "@type": "AdministrativeArea", name: "Los Angeles County, CA" },
+        { "@type": "AdministrativeArea", name: "Riverside County, CA" },
+        { "@type": "AdministrativeArea", name: "San Bernardino County, CA" },
+      ],
+      openingHoursSpecification: [
+        {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: [
+            "https://schema.org/Monday",
+            "https://schema.org/Tuesday",
+            "https://schema.org/Wednesday",
+            "https://schema.org/Thursday",
+            "https://schema.org/Friday",
+            "https://schema.org/Saturday",
+          ],
+          opens: "11:00",
+          closes: "20:00",
+        },
+      ],
+      contactPoint: [
+        {
+          "@type": "ContactPoint",
+          contactType: "sales",
+          name: "Julio",
+          telephone: "+17147836605",
+          availableLanguage: ["en", "es"],
+          areaServed: "US",
+        },
+        {
+          "@type": "ContactPoint",
+          contactType: "customer service",
+          name: "Nicole",
+          telephone: "+17147836615",
+          availableLanguage: ["en", "es"],
+          areaServed: "US",
+        },
+      ],
+      sameAs: [
+        "https://www.instagram.com/amazinglittle.bites",
+        "https://www.facebook.com/amazingLittle.bites",
+        "https://www.tiktok.com/@amazinglittle.bites",
+        GBP_CID_URL,
+      ],
+      hasMenu: { "@id": "https://amazinglittlebites.com/#menu" },
+      makesOffer: [
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Dessert & Snack Cart Catering",
+            serviceType: "Event catering",
+            description: "Mobile dessert and snack cart brought to your venue, set up and served on site.",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: { "@type": "Service", name: "Quinceañera Catering", serviceType: "Event catering" },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: { "@type": "Service", name: "Wedding Dessert Cart", serviceType: "Event catering" },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "Birthday & Sweet 16 Snack Cart",
+            serviceType: "Event catering",
+          },
+        },
+      ],
+    },
+    {
+      "@type": "Menu",
+      "@id": "https://amazinglittlebites.com/#menu",
+      name: "Amazing Little Bites Cart Menu",
+      inLanguage: "en-US",
+      hasMenuSection: [
+        {
+          "@type": "MenuSection",
+          name: "Snack Carts",
+          hasMenuItem: SNACK_CART_ITEMS.map((item) => ({ "@type": "MenuItem", name: item })),
+        },
+        {
+          "@type": "MenuSection",
+          name: "Hydration Bar",
+          hasMenuItem: [
+            "Mangonada",
+            "Agua de Piña",
+            "Agua de Fresa",
+            "Agua de Pepino con Limón",
+            "Agua de Tamarindo",
+            "Agua de Horchata",
+          ].map((item) => ({ "@type": "MenuItem", name: item })),
+        },
+      ],
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://amazinglittlebites.com/#website",
+      url: "https://amazinglittlebites.com/",
+      name: "Amazing Little Bites",
+      publisher: { "@id": "https://amazinglittlebites.com/#business" },
+      inLanguage: ["en-US", "es-MX"],
+    },
   ],
 };
 ---
