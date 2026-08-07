@@ -14,9 +14,9 @@ const services = [
 ];
 ---
 
-<section id="services" class="bg-blush/20 px-4 py-14 sm:px-6">
+<section id="services" aria-labelledby="services-heading" class="bg-blush/20 px-4 py-14 sm:px-6">
   <div class="mx-auto max-w-6xl">
-    <h2 class="text-center font-display text-2xl font-bold text-rose sm:text-3xl">{t.services.heading}</h2>
+    <h2 id="services-heading" class="text-center font-display text-2xl font-bold text-rose sm:text-3xl">{t.services.heading}</h2>
 
     <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {services.map((service) => (

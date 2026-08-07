@@ -135,6 +135,7 @@ const en = {
     instagramAria: "Amazing Little Bites on Instagram",
     facebookAria: "Amazing Little Bites on Facebook",
     tiktokAria: "Amazing Little Bites on TikTok",
+    googleBusinessAria: "Amazing Little Bites on Google Business Profile",
   },
   langToggle: {
     switchAria: "View this site in Spanish",
@@ -276,6 +277,7 @@ const es: typeof en = {
     instagramAria: "Amazing Little Bites en Instagram",
     facebookAria: "Amazing Little Bites en Facebook",
     tiktokAria: "Amazing Little Bites en TikTok",
+    googleBusinessAria: "Amazing Little Bites en el Perfil de Negocio de Google",
   },
   langToggle: {
     switchAria: "Ver este sitio en inglés",

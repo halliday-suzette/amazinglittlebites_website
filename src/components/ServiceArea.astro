@@ -11,9 +11,9 @@ const t = getDictionary(lang);
 const otherAreas = ["San Bernardino", "Riverside"];
 ---
 
-<section id="service-area" class="px-4 py-14 sm:px-6">
+<section id="service-area" aria-labelledby="service-area-heading" class="px-4 py-14 sm:px-6">
   <div class="mx-auto max-w-3xl text-center">
-    <h2 class="font-display text-2xl font-bold text-rose sm:text-3xl">{t.serviceArea.heading}</h2>
+    <h2 id="service-area-heading" class="font-display text-2xl font-bold text-rose sm:text-3xl">{t.serviceArea.heading}</h2>
 
     <div class="mt-8 inline-flex flex-col items-center gap-2">
       <span class="rounded-full bg-maroon px-6 py-2 font-display text-lg font-semibold text-cream">

@@ -18,6 +18,39 @@ const enUrl = new URL(import.meta.env.BASE_URL, Astro.site);
 const esUrl = new URL(`${import.meta.env.BASE_URL}es/`, Astro.site);
 const pageUrl = lang === "es" ? esUrl : enUrl;
 const ogImageUrl = new URL(`${import.meta.env.BASE_URL}og-image.jpg`, Astro.site);
+
+const businessSchema = {
+  "@context": "https://schema.org",
+  "@type": "CateringBusiness",
+  "@id": "https://amazinglittlebites.com/#business",
+  name: "Amazing Little Bites Event Management",
+  alternateName: "Amazing Little Bites",
+  url: "https://amazinglittlebites.com/",
+  logo: new URL(`${import.meta.env.BASE_URL}favicon.png`, Astro.site).toString(),
+  image: ogImageUrl.toString(),
+  description: t.meta.description,
+  telephone: "+17147836605",
+  email: "Amazinglittlebites24@outlook.com",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Anaheim",
+    addressRegion: "CA",
+    addressCountry: "US",
+  },
+  areaServed: ["Orange County, CA", "San Bernardino County, CA", "Riverside County, CA"],
+  openingHoursSpecification: {
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    opens: "11:00",
+    closes: "20:00",
+  },
+  sameAs: [
+    "https://www.instagram.com/amazinglittle.bites",
+    "https://www.facebook.com/amazingLittle.bites",
+    "https://www.tiktok.com/@amazinglittle.bites",
+    "https://www.google.com/maps/place/Amazing+Little+Bites+Event+Management/@33.8350352,-118.5760035,239731m/data=!3m1!1e3!4m8!3m7!1s0x905bf781484bba5:0x6553770e0ef2a991!8m2!3d33.835649!4d-117.9166221!9m1!1b1!16s%2Fg%2F11zd56c_97",
+  ],
+};
 ---
 
 <!doctype html>
@@ -53,9 +86,24 @@ const ogImageUrl = new URL(`${import.meta.env.BASE_URL}og-image.jpg`, Astro.site
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Inter:wght@400..700&display=swap"
+    />
+    <link
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Inter:wght@400..700&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
     />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Inter:wght@400..700&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
+
+    <script type="application/ld+json" set:html={JSON.stringify(businessSchema)} />
 
     <!-- Privacy-friendly analytics by Plausible -->
     <script async src="https://plausible.io/js/pa-QWaenrtT-XYAUD5cGXn6-.js"></script>

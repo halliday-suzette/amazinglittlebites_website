@@ -24,9 +24,9 @@ const images = Object.keys(imageModules)
 ---
 
 {images.length > 0 && (
-  <section id="gallery" class="px-4 py-14 sm:px-6">
+  <section id="gallery" aria-labelledby="gallery-heading" class="px-4 py-14 sm:px-6">
     <div class="mx-auto max-w-3xl text-center">
-      <h2 class="font-display text-2xl font-bold text-rose sm:text-3xl">{t.carousel.heading}</h2>
+      <h2 id="gallery-heading" class="font-display text-2xl font-bold text-rose sm:text-3xl">{t.carousel.heading}</h2>
     </div>
 
     <div

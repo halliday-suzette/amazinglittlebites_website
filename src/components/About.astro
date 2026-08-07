@@ -9,9 +9,9 @@ const { lang = "en" } = Astro.props;
 const t = getDictionary(lang);
 ---
 
-<section id="about" class="px-4 py-14 sm:px-6">
+<section id="about" aria-labelledby="about-heading" class="px-4 py-14 sm:px-6">
   <div class="mx-auto max-w-3xl text-center">
-    <h2 class="font-display text-2xl font-bold text-rose sm:text-3xl">{t.about.heading}</h2>
+    <h2 id="about-heading" class="font-display text-2xl font-bold text-rose sm:text-3xl">{t.about.heading}</h2>
     <p class="mt-4 font-body text-base leading-relaxed text-maroon/80 sm:text-lg">
       {t.about.body}
     </p>
