@@ -14,6 +14,19 @@ const PHONES = [
   { name: "Julio", display: "714-783-6605", href: "tel:+17147836605" },
   { name: "Nicole", display: "714-783-6615", href: "tel:+17147836615" },
 ];
+
+const REVIEW_LINKS = [
+  {
+    href: "https://www.google.com/maps/place/Amazing+Little+Bites+Event+Management/@33.8350352,-118.5760035,239731m/data=!3m1!1e3!4m8!3m7!1s0x905bf781484bba5:0x6553770e0ef2a991!8m2!3d33.835649!4d-117.9166221!9m1!1b1!16s%2Fg%2F11zd56c_97?entry=ttu&g_ep=EgoyMDI2MDgwNC4wIKXMDSoASAFQAw%3D%3D",
+    labelKey: "ctaSeeReviews" as const,
+    icon: "M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5C21.27 7.61 17 4.5 12 4.5Zm0 12.5a5 5 0 1 1 0-10 5 5 0 0 1 0 10Zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z",
+  },
+  {
+    href: "https://g.page/r/CZGp8g4Od1NlEAE/review",
+    labelKey: "ctaReview" as const,
+    icon: "M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279L12 19.771l-7.416 3.642 1.48-8.279-6.064-5.828 8.332-1.151z",
+  },
+];
 ---
 
 <section id="home" class="bg-gradient-to-b from-blush/40 via-cream to-cream px-4 py-14 sm:px-6 sm:py-20">
@@ -49,6 +62,22 @@ const PHONES = [
           class="rounded-full border-2 border-rose px-8 py-3 font-display text-base font-semibold text-rose transition hover:bg-rose hover:text-white"
         >
           {t.hero.ctaCall(phone.name, phone.display)}
+        </a>
+      ))}
+    </div>
+
+    <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
+      {REVIEW_LINKS.map((review) => (
+        <a
+          href={review.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center justify-center gap-2 rounded-full border-2 border-rose px-8 py-3 font-display text-base font-semibold text-rose transition hover:bg-rose hover:text-white"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d={review.icon} />
+          </svg>
+          {t.hero[review.labelKey]}
         </a>
       ))}
     </div>

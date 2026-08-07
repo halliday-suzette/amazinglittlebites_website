@@ -25,6 +25,8 @@ const en = {
       "From quinceañeras and sweet 16s to weddings and birthday parties, Amazing Little Bites brings a fun, customizable dessert & snack cart straight to your celebration.",
     ctaQuote: "Get a Free Quote",
     ctaCall: (name: string, display: string) => `Call ${name}: ${display}`,
+    ctaSeeReviews: "See Our Reviews on Google",
+    ctaReview: "Leave Us a Review on Google",
   },
   about: {
     heading: "A Mobile Cart Full of Fun",
@@ -164,6 +166,8 @@ const es: typeof en = {
       "Desde quinceañeras y dulces 16 hasta bodas y fiestas de cumpleaños, Amazing Little Bites lleva un carrito de postres y antojitos divertido y personalizable directo a tu celebración.",
     ctaQuote: "Pide tu Cotización Gratis",
     ctaCall: (name: string, display: string) => `Llama a ${name}: ${display}`,
+    ctaSeeReviews: "Mira Nuestras Reseñas en Google",
+    ctaReview: "Déjanos una Reseña en Google",
   },
   about: {
     heading: "Un Carrito Móvil Lleno de Diversión",
