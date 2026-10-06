@@ -1,0 +1,49 @@
+---
+import type { Lang } from "../i18n/translations";
+
+interface Props {
+  lang?: Lang;
+  heading: string;
+  subheading: string;
+  ctaLabel: string;
+}
+
+const { lang = "en", heading, subheading, ctaLabel } = Astro.props;
+
+const PHONES = [
+  { name: "Julio", display: "714-783-6605", href: "tel:+17147836605" },
+  { name: "Nicole", display: "714-783-6615", href: "tel:+17147836615" },
+];
+
+const callLabel = (name: string, display: string) =>
+  lang === "es" ? `Llama a ${name}: ${display}` : `Call ${name}: ${display}`;
+---
+
+<section class="bg-gradient-to-b from-blush/40 via-cream to-cream px-4 py-14 sm:px-6 sm:py-20">
+  <div class="mx-auto flex max-w-5xl flex-col items-center gap-6 text-center">
+    <h1 class="font-display text-3xl font-bold leading-tight text-maroon sm:text-4xl md:text-5xl">
+      {heading}
+    </h1>
+
+    <p class="max-w-2xl text-balance font-body text-base text-maroon/80 sm:text-lg">
+      {subheading}
+    </p>
+
+    <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
+      <a
+        href="#quote"
+        class="rounded-full bg-rose px-8 py-3 font-display text-base font-semibold text-white shadow-md transition hover:bg-rose-dark"
+      >
+        {ctaLabel}
+      </a>
+      {PHONES.map((phone) => (
+        <a
+          href={phone.href}
+          class="rounded-full border-2 border-rose px-8 py-3 font-display text-base font-semibold text-rose transition hover:bg-rose hover:text-white"
+        >
+          {callLabel(phone.name, phone.display)}
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

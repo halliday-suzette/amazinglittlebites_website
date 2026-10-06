@@ -15,6 +15,8 @@ const PHONES = [
   { name: "Nicole", display: "714-783-6615", href: "tel:+17147836615" },
 ];
 
+const BASE = lang === "es" ? `${import.meta.env.BASE_URL}es/` : import.meta.env.BASE_URL;
+
 const currentYear = new Date().getFullYear();
 ---
 
@@ -43,6 +45,15 @@ const currentYear = new Date().getFullYear();
       <p>Anaheim, CA</p>
       <a href="mailto:Amazinglittlebites24@outlook.com" class="text-blush hover:underline">
         Amazinglittlebites24@outlook.com
+      </a>
+    </div>
+
+    <div class="flex flex-col items-center gap-1 font-body text-sm text-cream/80">
+      <a href={`${BASE}dessert-cart-catering-orange-county/`} class="text-blush hover:underline">
+        {t.footer.dessertCartLinkLabel}
+      </a>
+      <a href={`${BASE}quinceanera-snack-cart-orange-county/`} class="text-blush hover:underline">
+        {t.footer.quinceaneraLinkLabel}
       </a>
     </div>
 

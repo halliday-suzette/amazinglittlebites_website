@@ -5,9 +5,10 @@ import { getDictionary, type Lang } from "../i18n/translations";
 
 interface Props {
   lang?: Lang;
+  path?: string;
 }
 
-const { lang = "en" } = Astro.props;
+const { lang = "en", path = "" } = Astro.props;
 const t = getDictionary(lang);
 
 const PHONES = [
@@ -15,17 +16,21 @@ const PHONES = [
   { name: "Nicole", display: "714-783-6615", href: "tel:+17147836615" },
 ];
 
+const BASE = import.meta.env.BASE_URL;
+const isHomepage = path === "";
+const homeHref = lang === "es" ? `${BASE}es/` : BASE;
+
 const navLinks = [
-  { href: "#home", label: t.nav.home },
-  { href: "#services", label: t.nav.services },
-  { href: "#menu", label: t.nav.menu },
+  { href: isHomepage ? "#home" : homeHref, label: t.nav.home },
+  { href: isHomepage ? "#services" : `${homeHref}#services`, label: t.nav.services },
+  { href: isHomepage ? "#menu" : `${homeHref}#menu`, label: t.nav.menu },
   { href: "#service-area", label: t.nav.serviceArea },
   { href: "#quote", label: t.nav.quote },
   { href: "#contact", label: t.nav.contact },
 ];
 
-const enHref = import.meta.env.BASE_URL;
-const esHref = `${import.meta.env.BASE_URL}es/`;
+const enHref = `${BASE}${path}`;
+const esHref = `${BASE}es/${path}`;
 ---
 
 <header class="sticky top-0 z-50 border-b border-blush/60 bg-cream/95 backdrop-blur">
@@ -50,7 +55,7 @@ const esHref = `${import.meta.env.BASE_URL}es/`;
   </div>
 
   <nav class="mx-auto flex max-w-6xl items-center justify-between px-3 py-2 sm:px-6" aria-label="Primary">
-    <a href="#home" class="flex shrink-0 items-center gap-2">
+    <a href={navLinks[0].href} class="flex shrink-0 items-center gap-2">
       <Image src={logo} alt={t.nav.logoAlt} width={48} height={48} class="h-12 w-12 shrink-0 object-contain" />
       <span class="whitespace-nowrap font-display text-base font-medium text-rose sm:text-xl">Amazing Little Bites</span>
     </a>

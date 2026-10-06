@@ -4,9 +4,10 @@ import { SNACK_CART_ITEMS } from "../data/menuItems";
 
 interface Props {
   lang?: Lang;
+  subject?: string;
 }
 
-const { lang = "en" } = Astro.props;
+const { lang = "en", subject = "New Quote Request - Amazing Little Bites" } = Astro.props;
 const t = getDictionary(lang);
 
 const PHONES = [
@@ -43,7 +44,7 @@ const PHONES = [
     >
       <!-- Honeypot field for spam protection (per Formspree convention) — keep hidden from real users -->
       <input type="text" name="_gotcha" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
-      <input type="hidden" name="_subject" value="New Quote Request - Amazing Little Bites" />
+      <input type="hidden" name="_subject" value={subject} />
 
       <div class="grid gap-5 sm:grid-cols-2">
         <div>

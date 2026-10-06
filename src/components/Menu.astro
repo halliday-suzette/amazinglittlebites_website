@@ -9,6 +9,8 @@ interface Props {
 const { lang = "en" } = Astro.props;
 const t = getDictionary(lang);
 
+const BASE = lang === "es" ? `${import.meta.env.BASE_URL}es/` : import.meta.env.BASE_URL;
+
 const snackCarts = SNACK_CART_ITEMS;
 
 const hydrationBar = [
@@ -75,5 +77,14 @@ const hydrationBar = [
     <p class="mx-auto mt-8 max-w-2xl text-center font-body text-sm text-maroon/80 sm:text-base">
       {t.menu.note}
     </p>
+
+    <div class="mx-auto mt-4 flex max-w-2xl flex-col items-center gap-1 text-center">
+      <a href={`${BASE}dessert-cart-catering-orange-county/`} class="font-body text-sm font-semibold text-rose hover:underline">
+        {t.menu.seeDessertCartPage}
+      </a>
+      <a href={`${BASE}quinceanera-snack-cart-orange-county/`} class="font-body text-sm font-semibold text-rose hover:underline">
+        {t.menu.seeQuinceaneraPage}
+      </a>
+    </div>
   </div>
 </section>

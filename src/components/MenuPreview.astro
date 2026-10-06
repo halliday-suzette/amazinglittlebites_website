@@ -1,0 +1,44 @@
+---
+interface Section {
+  label?: string;
+  items: string[];
+}
+
+interface Props {
+  heading: string;
+  sections: Section[];
+  seeFullMenuLabel: string;
+  seeFullMenuHref: string;
+}
+
+const { heading, sections, seeFullMenuLabel, seeFullMenuHref } = Astro.props;
+---
+
+<section aria-labelledby="menu-preview-heading" class="bg-blush/20 px-4 py-14 sm:px-6">
+  <div class="mx-auto max-w-4xl">
+    <h2 id="menu-preview-heading" class="text-center font-display text-2xl font-bold text-rose sm:text-3xl">
+      {heading}
+    </h2>
+
+    <div class={`mt-8 grid gap-6 ${sections.length > 1 ? "sm:grid-cols-2" : ""}`}>
+      {sections.map((section) => (
+        <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-blush/50 sm:p-8">
+          {section.label && (
+            <h3 class="font-display text-lg font-semibold text-rose">{section.label}</h3>
+          )}
+          <ul class="mt-3 space-y-2 font-body text-sm text-maroon/80">
+            {section.items.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    <p class="mt-6 text-center">
+      <a href={seeFullMenuHref} class="font-body text-sm font-semibold text-rose hover:underline">
+        {seeFullMenuLabel}
+      </a>
+    </p>
+  </div>
+</section>

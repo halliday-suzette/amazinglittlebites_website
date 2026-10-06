@@ -7,16 +7,17 @@ interface Props {
   lang?: Lang;
   title?: string;
   description?: string;
+  path?: string;
 }
 
-const { lang = "en", title, description } = Astro.props;
+const { lang = "en", title, description, path = "" } = Astro.props;
 const t = getDictionary(lang);
 
 const resolvedTitle = title ?? t.meta.title;
 const resolvedDescription = description ?? t.meta.description;
 
-const enUrl = new URL(import.meta.env.BASE_URL, Astro.site);
-const esUrl = new URL(`${import.meta.env.BASE_URL}es/`, Astro.site);
+const enUrl = new URL(`${import.meta.env.BASE_URL}${path}`, Astro.site);
+const esUrl = new URL(`${import.meta.env.BASE_URL}es/${path}`, Astro.site);
 const pageUrl = lang === "es" ? esUrl : enUrl;
 const ogImageUrl = new URL(`${import.meta.env.BASE_URL}og-image.jpg`, Astro.site);
 const logoImageUrl = new URL(`${import.meta.env.BASE_URL}logo-512.png`, Astro.site);

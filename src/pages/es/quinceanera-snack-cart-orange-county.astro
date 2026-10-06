@@ -1,0 +1,130 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Nav from "../../components/Nav.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import LandingHero from "../../components/LandingHero.astro";
+import PhotoGrid from "../../components/PhotoGrid.astro";
+import MenuPreview from "../../components/MenuPreview.astro";
+import HowItWorks from "../../components/HowItWorks.astro";
+import ServiceArea from "../../components/ServiceArea.astro";
+import TrustBadges from "../../components/TrustBadges.astro";
+import QuoteForm from "../../components/QuoteForm.astro";
+import Footer from "../../components/Footer.astro";
+import { getDictionary } from "../../i18n/translations";
+
+import eveningLighting from "../../assets/images/carousel/ALB 15 Birthday Party Set up Evening lighting.jpg";
+import cupNoodleBar from "../../assets/images/carousel/ALB Cup Noodle with Sauces.png";
+import maruchanCups from "../../assets/images/carousel/ALB MARUCHAN CUPS.png";
+import cinnamorollCart from "../../assets/images/carousel/Cinnamoroll Cart.png";
+
+const lang = "es";
+const path = "quinceanera-snack-cart-orange-county/";
+const t = getDictionary(lang);
+const tl = t.quinceaneraLanding;
+
+const BASE = import.meta.env.BASE_URL;
+const homeUrl = new URL(`${BASE}es/`, Astro.site);
+const pageUrl = new URL(`${BASE}es/${path}`, Astro.site);
+
+const breadcrumbItems = [
+  { name: t.nav.home, href: `${BASE}es/` },
+  { name: t.nav.services, href: `${BASE}es/#services` },
+  { name: tl.breadcrumbLabel },
+];
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: t.nav.home, item: homeUrl.toString() },
+    { "@type": "ListItem", position: 2, name: t.nav.services, item: `${homeUrl}#services` },
+    { "@type": "ListItem", position: 3, name: tl.breadcrumbLabel, item: pageUrl.toString() },
+  ],
+};
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "Carrito de Antojitos para Quinceañera",
+  serviceType: "Carrito móvil de postres y antojitos para quinceañeras",
+  description: tl.meta.description,
+  areaServed: [
+    { "@type": "AdministrativeArea", name: "Orange County, CA" },
+    { "@type": "AdministrativeArea", name: "Los Angeles County, CA" },
+    { "@type": "AdministrativeArea", name: "Riverside County, CA" },
+    { "@type": "AdministrativeArea", name: "San Bernardino County, CA" },
+  ],
+  provider: { "@id": "https://amazinglittlebites.com/#business" },
+};
+
+const galleryImages = [
+  { src: eveningLighting, alt: t.carousel.altByFile["ALB 15 Birthday Party Set up Evening lighting.jpg"] },
+  { src: cupNoodleBar, alt: t.carousel.altByFile["ALB Cup Noodle with Sauces.png"] },
+  { src: maruchanCups, alt: t.carousel.altByFile["ALB MARUCHAN CUPS.png"] },
+  { src: cinnamorollCart, alt: t.carousel.altByFile["Cinnamoroll Cart.png"] },
+];
+
+const menuSections = [
+  { items: ["Mini-Pancakes Bar", "Esquite Bar", "Mangonada", "Agua de Horchata", "Chunky Brownie Sundae"] },
+];
+---
+
+<Layout lang={lang} path={path} title={tl.meta.title} description={tl.meta.description}>
+  <Nav lang={lang} path={path} />
+  <Breadcrumbs items={breadcrumbItems} schema={breadcrumbSchema} />
+  <main>
+    <LandingHero lang={lang} heading={tl.hero.heading} subheading={tl.hero.subheading} ctaLabel={t.hero.ctaQuote} />
+
+    <section aria-labelledby="why-snack-cart-heading" class="bg-blush/20 px-4 py-14 sm:px-6">
+      <div class="mx-auto max-w-3xl text-center">
+        <h2 id="why-snack-cart-heading" class="font-display text-2xl font-bold text-rose sm:text-3xl">
+          {tl.whySnackCart.heading}
+        </h2>
+        <p class="mt-4 font-body text-base leading-relaxed text-maroon/80 sm:text-lg">
+          {tl.whySnackCart.intro}
+        </p>
+        <ul class="mt-6 grid gap-3 text-left font-body text-sm text-maroon/80 sm:grid-cols-1 sm:text-base">
+          {tl.whySnackCart.bullets.map((bullet) => (
+            <li class="flex items-start gap-2">
+              <span class="mt-1 text-rose" aria-hidden="true">✓</span>
+              <span>{bullet}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <MenuPreview
+      heading={tl.popularPicks.heading}
+      sections={menuSections}
+      seeFullMenuLabel={tl.popularPicks.seeFullMenu}
+      seeFullMenuHref={`${BASE}es/#menu`}
+    />
+
+    <PhotoGrid heading={tl.gallery.heading} images={galleryImages} />
+
+    <HowItWorks lang={lang} heading={tl.howItWorks.heading} steps={tl.howItWorks.steps} />
+
+    <ServiceArea lang={lang} />
+
+    <TrustBadges lang={lang} heading={tl.whyUs.heading} />
+
+    <section aria-labelledby="final-cta-heading" class="bg-blush/20 px-4 py-14 sm:px-6">
+      <div class="mx-auto max-w-2xl text-center">
+        <h2 id="final-cta-heading" class="font-display text-2xl font-bold text-rose sm:text-3xl">
+          {tl.finalCta.heading}
+        </h2>
+        <p class="mt-6">
+          <a href={`${BASE}es/#services`} class="font-body text-sm font-semibold text-rose hover:underline">
+            {tl.finalCta.seeServices}
+          </a>
+        </p>
+      </div>
+    </section>
+
+    <QuoteForm lang={lang} subject="Nueva Solicitud de Cotización — Carrito para Quinceañera" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />
+  </main>
+  <Footer lang={lang} />
+</Layout>

@@ -1,0 +1,45 @@
+---
+import { getDictionary, type Lang } from "../i18n/translations";
+
+interface Props {
+  lang?: Lang;
+  heading: string;
+}
+
+const { lang = "en", heading } = Astro.props;
+const t = getDictionary(lang);
+
+const GBP_REVIEWS_URL =
+  "https://www.google.com/maps/place/Amazing+Little+Bites+Event+Management/@33.8350352,-118.5760035,239731m/data=!3m1!1e3!4m8!3m7!1s0x905bf781484bba5:0x6553770e0ef2a991!8m2!3d33.835649!4d-117.9166221!9m1!1b1!16s%2Fg%2F11zd56c_97";
+
+const badges = [t.trustBadges.womenOwned, t.trustBadges.latinoOwned, t.trustBadges.lgbtqFriendly, t.trustBadges.bilingual];
+---
+
+<section aria-labelledby="why-us-heading" class="px-4 py-14 sm:px-6">
+  <div class="mx-auto max-w-3xl text-center">
+    <h2 id="why-us-heading" class="font-display text-2xl font-bold text-rose sm:text-3xl">{heading}</h2>
+
+    <span class="mt-6 inline-flex rounded-full bg-maroon px-6 py-2 font-display text-lg font-semibold text-cream">
+      {t.trustBadges.ratingLabel}
+    </span>
+
+    <div class="mt-5 flex flex-wrap justify-center gap-3">
+      {badges.map((badge) => (
+        <span class="rounded-full border-2 border-rose px-5 py-2 font-body text-sm font-semibold text-rose">
+          {badge}
+        </span>
+      ))}
+    </div>
+
+    <p class="mt-6">
+      <a
+        href={GBP_REVIEWS_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="font-body text-sm font-semibold text-rose hover:underline"
+      >
+        {t.trustBadges.reviewsLinkLabel}
+      </a>
+    </p>
+  </div>
+</section>

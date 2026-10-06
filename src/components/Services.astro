@@ -8,9 +8,21 @@ interface Props {
 const { lang = "en" } = Astro.props;
 const t = getDictionary(lang);
 
+const BASE = lang === "es" ? `${import.meta.env.BASE_URL}es/` : import.meta.env.BASE_URL;
+
 const services = [
-  { icon: "🎉", title: t.services.eventCatering.title, description: t.services.eventCatering.description },
-  { icon: "🍰", title: t.services.dessertCart.title, description: t.services.dessertCart.description },
+  {
+    icon: "🎉",
+    title: t.services.eventCatering.title,
+    description: t.services.eventCatering.description,
+    href: `${BASE}quinceanera-snack-cart-orange-county/`,
+  },
+  {
+    icon: "🍰",
+    title: t.services.dessertCart.title,
+    description: t.services.dessertCart.description,
+    href: `${BASE}dessert-cart-catering-orange-county/`,
+  },
 ];
 ---
 
@@ -24,6 +36,9 @@ const services = [
           <div class="text-4xl">{service.icon}</div>
           <h3 class="mt-3 font-display text-xl font-semibold text-maroon">{service.title}</h3>
           <p class="mt-2 font-body text-sm text-maroon/75">{service.description}</p>
+          <a href={service.href} class="mt-3 inline-block font-body text-sm font-semibold text-rose hover:underline">
+            {t.services.learnMore}
+          </a>
         </div>
       ))}
 

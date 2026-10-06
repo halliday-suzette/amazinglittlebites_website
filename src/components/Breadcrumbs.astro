@@ -1,0 +1,34 @@
+---
+interface Crumb {
+  name: string;
+  href?: string;
+}
+
+interface Props {
+  items: Crumb[];
+  schema: object;
+}
+
+const { items, schema } = Astro.props;
+---
+
+<nav aria-label="Breadcrumb" class="px-4 py-3 sm:px-6">
+  <ol class="mx-auto flex max-w-6xl flex-wrap items-center gap-1 font-body text-xs text-maroon/70 sm:text-sm">
+    {items.map((item, i) => (
+      <li class="flex items-center gap-1">
+        {item.href ? (
+          <a href={item.href} class="text-rose hover:underline">
+            {item.name}
+          </a>
+        ) : (
+          <span aria-current="page" class="text-maroon/70">
+            {item.name}
+          </span>
+        )}
+        {i < items.length - 1 && <span aria-hidden="true" class="px-1 text-maroon/40">/</span>}
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />
