@@ -61,6 +61,13 @@ const businessSchema = {
         longitude: -117.9166221,
       },
       hasMap: GBP_CID_URL,
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "5.0",
+        reviewCount: "10",
+        bestRating: "5",
+        worstRating: "1",
+      },
       areaServed: [
         { "@type": "AdministrativeArea", name: "Orange County, CA" },
         { "@type": "AdministrativeArea", name: "Los Angeles County, CA" },
@@ -119,11 +126,23 @@ const businessSchema = {
         },
         {
           "@type": "Offer",
-          itemOffered: { "@type": "Service", name: "Quinceañera Catering", serviceType: "Event catering" },
+          itemOffered: {
+            "@type": "Service",
+            name: "Quinceañera Catering",
+            serviceType: "Event catering",
+            description:
+              "Mobile dessert and snack cart styled and set up for quinceañera celebrations, with a customizable menu of sweet and savory bites served fresh on site.",
+          },
         },
         {
           "@type": "Offer",
-          itemOffered: { "@type": "Service", name: "Wedding Dessert Cart", serviceType: "Event catering" },
+          itemOffered: {
+            "@type": "Service",
+            name: "Wedding Dessert Cart",
+            serviceType: "Event catering",
+            description:
+              "A customizable dessert and snack cart brought to your wedding venue, offering guests a fun, interactive treat experience alongside the main reception.",
+          },
         },
         {
           "@type": "Offer",
@@ -131,6 +150,8 @@ const businessSchema = {
             "@type": "Service",
             name: "Birthday & Sweet 16 Snack Cart",
             serviceType: "Event catering",
+            description:
+              "A fully customizable dessert and snack cart for birthday parties and sweet 16 celebrations, bringing sweet and savory bites straight to the party.",
           },
         },
       ],
