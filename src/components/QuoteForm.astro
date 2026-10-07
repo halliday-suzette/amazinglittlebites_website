@@ -111,6 +111,34 @@ const PHONES = [
         </div>
 
         <div>
+          <label for="event-address" class="block font-body text-sm font-medium text-maroon">{t.quoteForm.fields.eventAddress} *</label>
+          <input
+            type="text"
+            id="event-address"
+            name="event_address"
+            required
+            autocomplete="street-address"
+            placeholder={t.quoteForm.fields.eventAddressPlaceholder}
+            class="mt-1 w-full rounded-lg border border-blush bg-cream px-3 py-2 font-body text-maroon focus:border-rose focus:outline-none focus:ring-1 focus:ring-rose"
+          />
+          <p class="field-error mt-1 hidden font-body text-xs text-red-600"></p>
+        </div>
+
+        <div>
+          <label for="location-type" class="block font-body text-sm font-medium text-maroon">{t.quoteForm.fields.locationType} *</label>
+          <select
+            id="location-type"
+            name="location_type"
+            required
+            class="mt-1 w-full rounded-lg border border-blush bg-cream px-3 py-2 font-body text-maroon focus:border-rose focus:outline-none focus:ring-1 focus:ring-rose"
+          >
+            <option value="" disabled selected>{t.quoteForm.fields.selectLocationType}</option>
+            {t.quoteForm.locationTypes.map((type) => <option value={type.value}>{type.label}</option>)}
+          </select>
+          <p class="field-error mt-1 hidden font-body text-xs text-red-600"></p>
+        </div>
+
+        <div>
           <label for="guest-count" class="block font-body text-sm font-medium text-maroon">{t.quoteForm.fields.guestCount} *</label>
           <input
             type="number"
